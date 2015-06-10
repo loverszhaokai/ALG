@@ -47,6 +47,13 @@ int create_tree(const string &_file_name, TreeNode **_root)
 		stringstream ss(line);
 		int val;
 		ss >> val;
+		cout << "height is : " << val << endl;
+	}
+
+	if (std::getline(infs, line)) {
+		stringstream ss(line);
+		int val;
+		ss >> val;
 		root = new TreeNode(val);
 		node_q.push(root);
 	}
@@ -87,10 +94,12 @@ int create_tree(const string &_file_name, TreeNode **_root)
 
 void free_tree(TreeNode *root)
 {
-}
-
-void dump_tree()
-{
+	while (root) {
+		free_tree(root->left);
+		free_tree(root->right);
+		delete root;
+		root = NULL;
+	}
 }
 
 int TEST_preorderTraversal_recursively()
@@ -99,18 +108,24 @@ int TEST_preorderTraversal_recursively()
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
 		const string in_file_name = in_files[iii];
-		ofs.open(OUTPUT_FILE, fstream::out);
+
 		TreeNode *root;
 		if (0 != create_tree(in_file_name, &root))
 			return -1;
+
+		// Run
+		ofs.open(OUTPUT_FILE, fstream::out);
 		preorderTraversal_recursively(root);
+		ofs.close();
+
 		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
-			cout << "failed  :" << endl;
+			cout << __FUNCTION__ << " failed  :" << endl;
 			cout << "expected:" << out_files[iii] << endl;
 			cout << "actual  :" << OUTPUT_FILE << endl;
 			return -1;
 		}
-		ofs.close();
+
+		free_tree(root);
 	}
 
 	return 0;

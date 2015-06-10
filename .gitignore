@@ -4,6 +4,7 @@
 *.log
 *.m4
 *.o
+*.out
 
 ar-lib
 autom4te.cache/
