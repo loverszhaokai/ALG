@@ -4,5 +4,8 @@
 struct TreeNode;
 
 void preorderTraversal_recursively(TreeNode *root);
+void inorderTraversal_recursively(TreeNode *root);
+void postorderTraversal_recursively(TreeNode *root);
+
 
 #endif

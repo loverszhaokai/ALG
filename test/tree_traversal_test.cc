@@ -131,9 +131,72 @@ int TEST_preorderTraversal_recursively()
 	return 0;
 }
 
+int TEST_inorderTraversal_recursively()
+{
+	if (0 != get_files("tree_traversal_test_data/inorder", &in_files, &out_files))
+		return -1;
+	for (int iii = 0; iii < in_files.size(); iii++) {
+		const string in_file_name = in_files[iii];
+
+		TreeNode *root;
+		if (0 != create_tree(in_file_name, &root))
+			return -1;
+
+		// Run
+		ofs.open(OUTPUT_FILE, fstream::out);
+		inorderTraversal_recursively(root);
+		ofs.close();
+
+		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
+			cout << __FUNCTION__ << " failed  :" << endl;
+			cout << "expected:" << out_files[iii] << endl;
+			cout << "actual  :" << OUTPUT_FILE << endl;
+			return -1;
+		}
+
+		free_tree(root);
+	}
+
+	return 0;
+}
+
+int TEST_postorderTraversal_recursively()
+{
+	if (0 != get_files("tree_traversal_test_data/postorder", &in_files, &out_files))
+		return -1;
+	for (int iii = 0; iii < in_files.size(); iii++) {
+		const string in_file_name = in_files[iii];
+
+		TreeNode *root;
+		if (0 != create_tree(in_file_name, &root))
+			return -1;
+
+		// Run
+		ofs.open(OUTPUT_FILE, fstream::out);
+		postorderTraversal_recursively(root);
+		ofs.close();
+
+		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
+			cout << __FUNCTION__ << " failed  :" << endl;
+			cout << "expected:" << out_files[iii] << endl;
+			cout << "actual  :" << OUTPUT_FILE << endl;
+			return -1;
+		}
+
+		free_tree(root);
+	}
+
+	return 0;
+}
+
 int main()
 {
 	if (0 != TEST_preorderTraversal_recursively())
 		return -1;
+	if (0 != TEST_inorderTraversal_recursively())
+		return -1;
+	if (0 != TEST_postorderTraversal_recursively())
+		return -1;
+
 	return 0;
 }
