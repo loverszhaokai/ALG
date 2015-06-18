@@ -9,6 +9,7 @@
 #include <string>
 
 #include "test.h"
+#include "time_util.h"
 #include "tree.h"
 
 using std::cout;
@@ -47,7 +48,7 @@ int create_tree(const string &_file_name, TreeNode **_root)
 		stringstream ss(line);
 		int val;
 		ss >> val;
-		cout << "height is : " << val << endl;
+		// cout << "height is : " << val << endl;
 	}
 
 	if (std::getline(infs, line)) {
@@ -104,6 +105,8 @@ void free_tree(TreeNode *root)
 
 int TEST_preorderTraversal_recursively()
 {
+	TimeUtil tu;
+
 	if (0 != get_files("tree_traversal_test_data/preorder", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
@@ -115,24 +118,63 @@ int TEST_preorderTraversal_recursively()
 
 		// Run
 		ofs.open(OUTPUT_FILE, fstream::out);
+		tu.restart();
+
 		preorderTraversal_recursively(root);
+
+		tu.stop();
 		ofs.close();
 
 		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
 			cout << __FUNCTION__ << " failed  :" << endl;
-			cout << "expected:" << out_files[iii] << endl;
-			cout << "actual  :" << OUTPUT_FILE << endl;
 			return -1;
 		}
 
 		free_tree(root);
 	}
+	cout << __FUNCTION__ << "  total run time=" << tu.get_total_run_time() << "ms" << endl;
+
+	return 0;
+}
+
+int TEST_preorderTraversal_iteratively()
+{
+	TimeUtil tu;
+
+	if (0 != get_files("tree_traversal_test_data/preorder", &in_files, &out_files))
+		return -1;
+	for (int iii = 0; iii < in_files.size(); iii++) {
+		const string in_file_name = in_files[iii];
+
+		TreeNode *root;
+		if (0 != create_tree(in_file_name, &root))
+			return -1;
+
+		// Run
+		ofs.open(OUTPUT_FILE, fstream::out);
+		tu.restart();
+
+		preorderTraversal_iteratively(root);
+
+		tu.stop();
+		ofs.close();
+
+		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
+			cout << __FUNCTION__ << " failed  :" << endl;
+			return -1;
+		}
+
+		free_tree(root);
+	}
+	cout << __FUNCTION__ << "  total run time=" << tu.get_total_run_time() << "ms" << endl;
 
 	return 0;
 }
 
 int TEST_inorderTraversal_recursively()
 {
+	TimeUtil tu;
+
 	if (0 != get_files("tree_traversal_test_data/inorder", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
@@ -144,24 +186,63 @@ int TEST_inorderTraversal_recursively()
 
 		// Run
 		ofs.open(OUTPUT_FILE, fstream::out);
+		tu.restart();
+
 		inorderTraversal_recursively(root);
+
+		tu.stop();
 		ofs.close();
 
 		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
 			cout << __FUNCTION__ << " failed  :" << endl;
-			cout << "expected:" << out_files[iii] << endl;
-			cout << "actual  :" << OUTPUT_FILE << endl;
 			return -1;
 		}
 
 		free_tree(root);
 	}
+	cout << __FUNCTION__ << "  total run time=" << tu.get_total_run_time() << "ms" << endl;
+
+	return 0;
+}
+
+int TEST_inorderTraversal_iteratively()
+{
+	TimeUtil tu;
+
+	if (0 != get_files("tree_traversal_test_data/inorder", &in_files, &out_files))
+		return -1;
+	for (int iii = 0; iii < in_files.size(); iii++) {
+		const string in_file_name = in_files[iii];
+
+		TreeNode *root;
+		if (0 != create_tree(in_file_name, &root))
+			return -1;
+
+		// Run
+		ofs.open(OUTPUT_FILE, fstream::out);
+		tu.restart();
+
+		inorderTraversal_iteratively(root);
+
+		tu.stop();
+		ofs.close();
+
+		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
+			cout << __FUNCTION__ << " failed  :" << endl;
+			return -1;
+		}
+
+		free_tree(root);
+	}
+	cout << __FUNCTION__ << "  total run time=" << tu.get_total_run_time() << "ms" << endl;
 
 	return 0;
 }
 
 int TEST_postorderTraversal_recursively()
 {
+	TimeUtil tu;
+
 	if (0 != get_files("tree_traversal_test_data/postorder", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
@@ -173,30 +254,81 @@ int TEST_postorderTraversal_recursively()
 
 		// Run
 		ofs.open(OUTPUT_FILE, fstream::out);
+		tu.restart();
+
 		postorderTraversal_recursively(root);
+
+		tu.stop();
 		ofs.close();
 
 		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
 			cout << __FUNCTION__ << " failed  :" << endl;
-			cout << "expected:" << out_files[iii] << endl;
-			cout << "actual  :" << OUTPUT_FILE << endl;
 			return -1;
 		}
 
 		free_tree(root);
 	}
+	cout << __FUNCTION__ << "  total run time=" << tu.get_total_run_time() << "ms" << endl;
+
+	return 0;
+}
+
+int TEST_postorderTraversal_iteratively()
+{
+	TimeUtil tu;
+
+	if (0 != get_files("tree_traversal_test_data/postorder", &in_files, &out_files))
+		return -1;
+	for (int iii = 0; iii < in_files.size(); iii++) {
+		const string in_file_name = in_files[iii];
+
+		TreeNode *root;
+		if (0 != create_tree(in_file_name, &root))
+			return -1;
+
+		// Run
+		ofs.open(OUTPUT_FILE, fstream::out);
+		tu.restart();
+
+		postorderTraversal_iteratively(root);
+
+		tu.stop();
+		ofs.close();
+
+		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
+			cout << __FUNCTION__ << " failed  :" << endl;
+			return -1;
+		}
+
+		free_tree(root);
+	}
+	cout << __FUNCTION__ << "  total run time=" << tu.get_total_run_time() << "ms" << endl;
 
 	return 0;
 }
 
 int main()
 {
+	TimeUtil tu;
 	if (0 != TEST_preorderTraversal_recursively())
 		return -1;
+
+	if (0 != TEST_preorderTraversal_iteratively())
+		return -1;
+
 	if (0 != TEST_inorderTraversal_recursively())
 		return -1;
+
+	if (0 != TEST_inorderTraversal_iteratively())
+		return -1;
+
 	if (0 != TEST_postorderTraversal_recursively())
 		return -1;
+
+	if (0 != TEST_postorderTraversal_iteratively())
+		return -1;
+
+	cout << __FILE__ << "  total run time=" << tu.get_run_time() << "ms" << endl;
 
 	return 0;
 }

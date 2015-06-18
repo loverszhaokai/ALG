@@ -55,10 +55,14 @@ int compare_file(const string &_left_file, const string &_right_file)
 
 	if (!left_fs) {
 		fprintf(stderr, "file=%s does not exist\n", _left_file.c_str());
+		cout << "expected:" << _left_file << endl;
+		cout << "actual  :" << _right_file << endl;
 		return 1;
 	}
 	if (!right_fs) {
 		fprintf(stderr, "file=%s does not exist\n", _right_file.c_str());
+		cout << "expected:" << _left_file << endl;
+		cout << "actual  :" << _right_file << endl;
 		return 1;
 	}
 
@@ -91,5 +95,7 @@ int compare_file(const string &_left_file, const string &_right_file)
 diff:
 	left_fs.close();
 	right_fs.close();
+	cout << "expected:" << _left_file << endl;
+	cout << "actual  :" << _right_file << endl;
 	return 1;
 }
