@@ -12,6 +12,7 @@ using std::fstream;
 extern fstream ofs;
 
 // majority element is the element that appears more than ⌊ n/2 ⌋ times
+// OJ: https://leetcode.com/problems/majority-element/
 void major_element_2(const vector<int> &nums)
 {
 	if (nums.size() < 2)
