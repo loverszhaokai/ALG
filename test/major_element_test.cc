@@ -85,10 +85,43 @@ int TEST_major_element_2()
 	return 0;
 }
 
+int TEST_major_element_3()
+{
+	TimeUtil tu;
+
+	if (0 != get_files("major_element_test_data/3", &in_files, &out_files))
+		return -1;
+	for (int iii = 0; iii < in_files.size(); iii++) {
+		const string in_file_name = in_files[iii];
+		vector<int> nums;
+
+		create_nums(in_file_name, &nums);
+
+		// Run
+		ofs.open(OUTPUT_FILE, fstream::out);
+		tu.restart();
+
+		major_element_3(nums);
+
+		tu.stop();
+		ofs.close();
+
+		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
+			cout << __FUNCTION__ << " failed  :" << endl;
+			return -1;
+		}
+	}
+	cout << __FUNCTION__ << "  total run time=" << tu.get_total_run_time() << "ms" << endl;
+
+	return 0;
+}
+
 int main()
 {
 	TimeUtil tu;
 	if (0 != TEST_major_element_2())
+		return -1;
+	if (0 != TEST_major_element_3())
 		return -1;
 
 	cout << __FILE__ << "  total run time=" << tu.get_run_time() << "ms" << endl;
