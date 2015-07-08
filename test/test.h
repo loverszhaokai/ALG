@@ -9,6 +9,8 @@ using std::vector;
 
 #define OUTPUT_FILE "output_test.txt"
 
+int str_to_int(const string &_str);
+
 int get_files(const string &_path, vector<string> *_in_files, vector<string> *_out_files);
 
 int compare_file(const string &_left_file, const string &_right_file);

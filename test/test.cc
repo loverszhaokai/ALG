@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <sstream>
 #include <string>
 
 #include <dirent.h>
@@ -13,8 +14,17 @@
 using std::cout;
 using std::endl;
 using std::fstream;
+using std::stringstream;
 
 fstream ofs;
+
+int str_to_int(const string &_str)
+{
+	stringstream ss(_str);
+	int val;
+	ss >> val;
+	return val;
+}
 
 int get_files(const string &_path, vector<string> *_in_files, vector<string> *_out_files)
 {

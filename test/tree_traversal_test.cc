@@ -21,15 +21,7 @@ using std::stringstream;
 
 extern fstream ofs;
 
-vector<string> in_files, out_files;
-
-int str_to_int(const string &_str)
-{
-	stringstream ss(_str);
-	int val;
-	ss >> val;
-	return val;
-}
+static vector<string> in_files, out_files;
 
 int create_tree(const string &_file_name, TreeNode **_root)
 {
