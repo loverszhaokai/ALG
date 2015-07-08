@@ -114,3 +114,97 @@ void major_element_3(const vector<int> &nums)
 	if (count2 > nums.size() / 3)
 		ofs << candidate2 << endl;
 }
+
+// Majority element is the element that appears more than ⌊ n/4 ⌋ times
+void major_element_4(const vector<int> &nums)
+{
+	if (nums.size() < 1)
+		return;
+
+	if (nums.size() < 4) {
+		for (int iii = 0; iii < nums.size(); iii++)
+			ofs << nums[iii] << endl;
+		return;
+	}
+
+	int candidate1, candidate2, candidate3;
+
+	int count1 = 0; // count of candidate1
+	int count2 = 0; // count of candidate2
+	int count3 = 0; // count of candidate3
+
+	// nums.size() >= 4
+	int nums_index = 0;
+	candidate1 = nums[0];
+
+	for (; nums_index < nums.size(); nums_index++) {
+		if (0 == count2) {
+			if (candidate1 != nums[nums_index]) {
+				candidate2 = nums[nums_index];
+				count1 = nums_index;
+				count2 = 1;
+			}
+		} else if (0 == count3) {
+			if (candidate1 != nums[nums_index] && candidate2 != nums[nums_index]) {
+				candidate3 = nums[nums_index];
+				count3 = 1;
+			}
+		}
+		if (count2 && count3)
+			break;
+	}
+
+	if (nums_index == nums.size()) {
+		ofs << candidate1 << endl;
+		if (0 != count2)
+			ofs << candidate2 << endl;
+		if (0 != count3)
+			ofs << candidate3 << endl;
+		return;
+	}
+
+	nums_index++;
+	for (; nums_index < nums.size(); nums_index++) {
+		if (nums[nums_index] == candidate1) {
+			count1++;
+		} else if (nums[nums_index] == candidate2) {
+			count2++;
+		} else if (nums[nums_index] == candidate3) {
+			count3++;
+		} else {
+			if (count1 && count2 && count3) {
+				count1--;
+				count2--;
+				count3--;
+			} else if (0 == count1) {
+				candidate1 = nums[nums_index];
+				count1 = 1;
+			} else if (0 == count2) {
+				candidate2 = nums[nums_index];
+				count2 = 1;
+			} else {
+				candidate3 = nums[nums_index];
+				count3 = 1;
+			}
+		}
+	}
+
+	count1 = 0;
+	count2 = 0;
+	count3 = 0;
+	for (int iii = 0; iii < nums.size(); iii++) {
+		if (nums[iii] == candidate1)
+			count1++;
+		else if (nums[iii] == candidate2)
+			count2++;
+		else if (nums[iii] == candidate3)
+			count3++;
+	}
+
+	if (count1 > nums.size() / 4)
+		ofs << candidate1 << endl;
+	if (count2 > nums.size() / 4)
+		ofs << candidate2 << endl;
+	if (count3 > nums.size() / 4)
+		ofs << candidate3 << endl;
+}

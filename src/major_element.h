@@ -7,6 +7,6 @@ using std::vector;
 
 void major_element_2(const vector<int> &nums);
 void major_element_3(const vector<int> &nums);
-
+void major_element_4(const vector<int> &nums);
 
 #endif
