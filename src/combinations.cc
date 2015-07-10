@@ -252,8 +252,8 @@ vector<vector<int> > combine_bit_operation(int n, int k)
 //
 // Date: 2015-07-10
 // TesetCases: 4
-//   combine_kai          : 277ms
-//   combine_backtrack    : 292ms
-//   combine_01: 499
-//   combine_bit_operation: 517ms
+//   combine_kai          : 125ms
+//   combine_backtrack    : 132ms
+//   combine_01           : 205ms
+//   combine_bit_operation: 201ms
 // 
