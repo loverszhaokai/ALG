@@ -118,7 +118,7 @@ int TEST_preorderTraversal_recursively()
 		ofs.close();
 
 		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
-			cout << __FUNCTION__ << " failed  :" << endl;
+			cout << __FUNCTION__ << " case " << iii + 1 << " failed  :" << endl;
 			return -1;
 		}
 
@@ -152,7 +152,7 @@ int TEST_preorderTraversal_iteratively()
 		ofs.close();
 
 		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
-			cout << __FUNCTION__ << " failed  :" << endl;
+			cout << __FUNCTION__ << " case " << iii + 1 << " failed  :" << endl;
 			return -1;
 		}
 
@@ -186,7 +186,7 @@ int TEST_inorderTraversal_recursively()
 		ofs.close();
 
 		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
-			cout << __FUNCTION__ << " failed  :" << endl;
+			cout << __FUNCTION__ << " case " << iii + 1 << " failed  :" << endl;
 			return -1;
 		}
 
@@ -220,7 +220,7 @@ int TEST_inorderTraversal_iteratively()
 		ofs.close();
 
 		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
-			cout << __FUNCTION__ << " failed  :" << endl;
+			cout << __FUNCTION__ << " case " << iii + 1 << " failed  :" << endl;
 			return -1;
 		}
 
@@ -254,7 +254,7 @@ int TEST_postorderTraversal_recursively()
 		ofs.close();
 
 		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
-			cout << __FUNCTION__ << " failed  :" << endl;
+			cout << __FUNCTION__ << " case " << iii + 1 << " failed  :" << endl;
 			return -1;
 		}
 
@@ -288,7 +288,7 @@ int TEST_postorderTraversal_iteratively()
 		ofs.close();
 
 		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
-			cout << __FUNCTION__ << " failed  :" << endl;
+			cout << __FUNCTION__ << " case " << iii + 1 << " failed  :" << endl;
 			return -1;
 		}
 

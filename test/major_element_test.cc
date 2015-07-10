@@ -76,7 +76,7 @@ int TEST_major_element_2()
 		ofs.close();
 
 		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
-			cout << __FUNCTION__ << " failed  :" << endl;
+			cout << __FUNCTION__ << " case " << iii + 1 << " failed  :" << endl;
 			return -1;
 		}
 	}
@@ -107,7 +107,7 @@ int TEST_major_element_3()
 		ofs.close();
 
 		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
-			cout << __FUNCTION__ << " failed  :" << endl;
+			cout << __FUNCTION__ << " case " << iii + 1 << " failed  :" << endl;
 			return -1;
 		}
 	}
@@ -139,7 +139,7 @@ int TEST_major_element_4()
 		ofs.close();
 
 		if (0 != compare_file(out_files[iii], OUTPUT_FILE)) {
-			cout << __FUNCTION__ << " failed  :" << endl;
+			cout << __FUNCTION__ << " case " << iii + 1 << " failed  :" << endl;
 			return -1;
 		}
 	}

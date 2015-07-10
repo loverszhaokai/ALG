@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -52,6 +53,10 @@ int get_files(const string &_path, vector<string> *_in_files, vector<string> *_o
 		}
 	}
 	closedir(dir);
+
+	std::sort(in_files.begin(), in_files.end());
+	std::sort(out_files.begin(), out_files.end());
+
 	*_in_files = in_files;
 	*_out_files = out_files;
 	return 0;
