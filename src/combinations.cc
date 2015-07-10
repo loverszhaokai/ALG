@@ -48,24 +48,20 @@ vector<vector<int> > combine_kai(int n, int k)
 		v[iii] = iii + 1;
 	ans.push_back(v);
 
+	int index;
 	while (1) {
-		bool finish = true;
-		for (int iii = k - 1; iii >= 0; iii--) {
-			if (v[iii] != n - k + iii + 1) {
-				v[iii]++;
-				for (int jjj = iii + 1; jjj < k; jjj++)
+		for (index = k - 1; index >= 0; index--) {
+			if (v[index] != n - k + index + 1) {
+				v[index]++;
+				for (int jjj = index + 1; jjj < k; jjj++)
 					v[jjj] = v[jjj - 1] + 1;
-				finish = false;
+				ans.push_back(v);
 				break;
 			}
 		}
-
-		if (finish)
-			break;
-		ans.push_back(v);
+		if (index < 0)
+			return ans;
 	}
-
-	return ans;
 }
 
 // Reference: https://leetcode.com/discuss/43968/java-solution-with-backtracking
@@ -254,6 +250,6 @@ vector<vector<int> > combine_bit_operation(int n, int k)
 // TesetCases: 4
 //   combine_kai          : 125ms
 //   combine_backtrack    : 132ms
-//   combine_01           : 205ms
-//   combine_bit_operation: 201ms
+//   combine_01           : 203ms
+//   combine_bit_operation: 210ms
 // 
