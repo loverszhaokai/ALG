@@ -1,5 +1,5 @@
-#ifndef _ALG_STC_TREE_TRAVERSAL_H_
-#define _ALG_STC_TREE_TRAVERSAL_H_
+#ifndef _ALG_SRC_TREE_TRAVERSAL_H_
+#define _ALG_SRC_TREE_TRAVERSAL_H_
 
 struct TreeNode;
 

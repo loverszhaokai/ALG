@@ -1,5 +1,5 @@
-#ifndef _ALG_STC_MAJOR_ELEMENT_H_
-#define _ALG_STC_MAJOR_ELEMENT_H_
+#ifndef _ALG_SRC_MAJOR_ELEMENT_H_
+#define _ALG_SRC_MAJOR_ELEMENT_H_
 
 #include <vector>
 
