@@ -4,8 +4,10 @@
 #include <string.h>
 
 #include <iostream>
+#include <stack>
 
-using namespace std;
+using std::stack;
+
 
 // Sort from small to big including left and right
 static void _quick_sort(int a[], const int orig_left, const int orig_right)
@@ -18,14 +20,12 @@ static void _quick_sort(int a[], const int orig_left, const int orig_right)
 	int guard = a[left];
 
 	while (left < right) {
-		while (left < right && a[right] > guard) {
+		while (left < right && a[right] > guard)
 			right--;
-		}
 		a[left] = a[right];
 
-		while (left < right && a[left] <= guard) {
+		while (left < right && a[left] <= guard)
 			left++;
-		}
 		a[right] = a[left];
 	}
 
@@ -38,6 +38,47 @@ static void _quick_sort(int a[], const int orig_left, const int orig_right)
 void quick_sort(int a[], const int size)
 {
 	_quick_sort(a, 0, size - 1);
+}
+
+void quick_sort_iteratively(int a[], const int size)
+{
+	int left, right, guard, left_orig, right_orig;
+	stack<int> ids;
+
+	ids.push(size - 1);
+	ids.push(0);
+
+	while (!ids.empty()) {
+		left = ids.top();
+		ids.pop();
+		right = ids.top();
+		ids.pop();
+
+		guard = a[left];
+		left_orig = left;
+		right_orig = right;
+
+		while (left < right) {
+			while (left < right && a[right] > guard)
+				right--;
+			a[left] = a[right];
+
+			while (left < right && a[left] <= guard)
+				left++;
+			a[right] = a[left];
+		}
+
+		a[left] = guard;
+
+		if (left_orig < left - 1) {
+			ids.push(left - 1);
+			ids.push(left_orig);
+		}
+		if (left + 1 < right_orig) {
+			ids.push(right_orig);
+			ids.push(left + 1);
+		}
+	}
 }
 
 // Sort from small to big

@@ -5,6 +5,8 @@
 
 void quick_sort(int a[], const int size);
 
+void quick_sort_iteratively(int a[], const int size);
+
 void insert_sort(int a[], const int size);
 
 void bubble_sort(int a[], const int size);
