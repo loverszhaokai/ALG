@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <queue>
 #include <sstream>
@@ -23,11 +24,16 @@ using std::queue;
 using std::string;
 using std::stringstream;
 
+struct ArrSize {
+	int size_1d;
+	int size_2d;
+};
+
 int **array_orig;      // All the arrays are copied from array_orig;
 int **array_expected;  // 
 
-const int size_1d = 1000000; // 10 million
-const int size_2d = 20;
+int size_1d;
+int size_2d;
 
 // @size_1d: the size of each array
 // @size_2d: the size of all the arrays
@@ -140,16 +146,19 @@ static int test_sort(const char *function_name, SortFunction sort_f)
 	if (compare_array(array, array_expected, size_1d, size_2d) != 0)
 		goto err;
 
-	cout << function_name << "  total run time=" << tu.get_total_run_time() << "ms" << endl;
+	cout << std::setw(20) << function_name
+		<< std::setw(10) << "  total run time = "
+		<< std::setw(10) << (int)tu.get_total_run_time() << " ms"
+		<< std::setw(18) << " when arrays is: "
+		<< std::setw(12) << size_1d << " * " << size_2d << endl;
 
-	free(array);
+	free_arrays(array, size_1d);
 	return 0;
 
 err:
-	free(array);
+	free_arrays(array, size_1d);
 	return -1;
 }
-
 
 //
 // time = 187ms; when size_1d is 1 million and size_2d is 20
@@ -226,44 +235,104 @@ static int init()
 	for (int iii = 0; iii < size_1d; iii++)
 		std::sort(array_expected[iii], array_expected[iii] + size_2d);
 
-	cout << "It takes " << tu.get_run_time() << "ms to generate arrays" << endl;
+	cout << endl;
+	cout << "It takes " << tu.get_run_time() << " ms to generate arrays: " << size_1d << " * " << size_2d << endl;
+	cout << endl;
 	return 0;
 }
 
 static void done()
 {
-	free(array_expected);
-	free(array_orig);
+	free_arrays(array_expected, size_1d);
+	free_arrays(array_orig, size_1d);
 }
 
 int main()
 {
 	TimeUtil tu;
 
-	if (init() != 0)
-		return -1;
+	const struct ArrSize arr_sizes [] = {
+		{ 1000000, 20 },         // 1   million  * 20           = 20  million
+		{ 10000000, 20 },        // 10  million  * 20           = 200 million
 
-	if (TEST_insert_sort() != 0)
-		return -1;
+		{ 100000, 200 },         // 100 thousand * 200          = 20  million
+		{ 100000, 2000 },        // 100 thousand * 2000         = 200 million
+	};
 
-	if (TEST_stl_sort() != 0)
-		return -1;
+	for (int iii = 0;
+		iii < sizeof(arr_sizes) / sizeof(struct ArrSize); iii++) {
 
-	if (TEST_quick_sort() != 0)
-		return -1;
+		size_1d = arr_sizes[iii].size_1d;
+		size_2d = arr_sizes[iii].size_2d;
 
-	if (TEST_select_sort() != 0)
-		return -1;
+		if (init() != 0)
+			return -1;
 
-	if (TEST_merge_sort() != 0)
-		return -1;
+		if (TEST_insert_sort() != 0)
+			return -1;
 
-	if (TEST_bubble_sort() != 0)
-		return -1;
+		if (TEST_stl_sort() != 0)
+			return -1;
 
-	done();
+		if (TEST_quick_sort() != 0)
+			return -1;
 
-	cout << __FILE__ << "  total run time=" << tu.get_run_time() << "ms" << endl;
+		if (TEST_select_sort() != 0)
+			return -1;
+
+		if (TEST_merge_sort() != 0)
+			return -1;
+
+		if (TEST_bubble_sort() != 0)
+			return -1;
+
+		done();
+	}
+
+	cout << __FILE__ << "  total run time=" << tu.get_run_time() << " ms" << endl;
 
 	return 0;
 }
+
+/*
+
+Test data:
+
+It takes 664.014 ms to generate arrays: 1000000 * 20
+
+    TEST_insert_sort  total run time =        183 ms  when arrays is:      1000000 * 20
+       TEST_stl_sort  total run time =        245 ms  when arrays is:      1000000 * 20
+     TEST_quick_sort  total run time =        310 ms  when arrays is:      1000000 * 20
+    TEST_select_sort  total run time =        411 ms  when arrays is:      1000000 * 20
+     TEST_merge_sort  total run time =        483 ms  when arrays is:      1000000 * 20
+    TEST_bubble_sort  total run time =        530 ms  when arrays is:      1000000 * 20
+
+It takes 6642.19 ms to generate arrays: 10000000 * 20
+
+    TEST_insert_sort  total run time =       1862 ms  when arrays is:     10000000 * 20
+       TEST_stl_sort  total run time =       2446 ms  when arrays is:     10000000 * 20
+     TEST_quick_sort  total run time =       3071 ms  when arrays is:     10000000 * 20
+    TEST_select_sort  total run time =       4106 ms  when arrays is:     10000000 * 20
+     TEST_merge_sort  total run time =       4791 ms  when arrays is:     10000000 * 20
+    TEST_bubble_sort  total run time =       5324 ms  when arrays is:     10000000 * 20
+
+It takes 801.532 ms to generate arrays: 100000 * 200
+
+    TEST_insert_sort  total run time =        665 ms  when arrays is:       100000 * 200
+       TEST_stl_sort  total run time =        431 ms  when arrays is:       100000 * 200
+     TEST_quick_sort  total run time =        513 ms  when arrays is:       100000 * 200
+    TEST_select_sort  total run time =       1578 ms  when arrays is:       100000 * 200
+     TEST_merge_sort  total run time =        756 ms  when arrays is:       100000 * 200
+    TEST_bubble_sort  total run time =       3317 ms  when arrays is:       100000 * 200
+
+It takes 9591.41 ms to generate arrays: 100000 * 2000
+
+    TEST_insert_sort  total run time =      52265 ms  when arrays is:       100000 * 2000
+       TEST_stl_sort  total run time =       5953 ms  when arrays is:       100000 * 2000
+     TEST_quick_sort  total run time =       7375 ms  when arrays is:       100000 * 2000
+    TEST_select_sort  total run time =     112452 ms  when arrays is:       100000 * 2000
+     TEST_merge_sort  total run time =      10539 ms  when arrays is:       100000 * 2000
+    TEST_bubble_sort  total run time =     236275 ms  when arrays is:       100000 * 2000
+sort_test.cc  total run time=482889 ms
+
+*/
