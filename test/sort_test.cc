@@ -119,11 +119,9 @@ static void print_array(int **a, int size_1d, int size_2d)
 	cout << endl;
 }
 
-//
-// time = 187ms; when size_1d is 1 million and size_2d is 20
-// time = 1892ms; when size_1d is 10 million and size_2d is 20
-//
-static int TEST_insert_sort()
+typedef void (* SortFunction)(int a[], const int size);
+
+static int test_sort(const char *function_name, SortFunction sort_f)
 {
 	TimeUtil tu;
 	int **array;
@@ -135,14 +133,14 @@ static int TEST_insert_sort()
 	tu.restart();
 
 	for (int iii = 0; iii < size_1d; iii++)
-		insert_sort(array[iii], size_2d);
+		sort_f(array[iii], size_2d);
 
 	tu.stop();
 
 	if (compare_array(array, array_expected, size_1d, size_2d) != 0)
 		goto err;
 
-	cout << __FUNCTION__ << "  total run time=" << tu.get_total_run_time() << "ms" << endl;
+	cout << function_name << "  total run time=" << tu.get_total_run_time() << "ms" << endl;
 
 	free(array);
 	return 0;
@@ -150,6 +148,21 @@ static int TEST_insert_sort()
 err:
 	free(array);
 	return -1;
+}
+
+
+//
+// time = 187ms; when size_1d is 1 million and size_2d is 20
+// time = 1892ms; when size_1d is 10 million and size_2d is 20
+//
+static int TEST_insert_sort()
+{
+	return test_sort(__FUNCTION__, insert_sort);
+}
+
+static void stl_sort(int a[], const int size)
+{
+	std::sort(a, a + size);
 }
 
 //
@@ -158,31 +171,7 @@ err:
 //
 static int TEST_stl_sort()
 {
-	TimeUtil tu;
-	int **array;
-
-	if (copy_arrays(&array, array_orig, size_1d, size_2d) != 0)
-		goto err;
-
-	// Run
-	tu.restart();
-
-	for (int iii = 0; iii < size_1d; iii++)
-		std::sort(array[iii], array[iii] + size_2d);
-
-	tu.stop();
-
-	if (compare_array(array, array_expected, size_1d, size_2d) != 0)
-		goto err;
-
-	cout << __FUNCTION__ << "  total run time=" << tu.get_total_run_time() << "ms" << endl;
-
-	free(array);
-	return 0;
-
-err:
-	free(array);
-	return -1;
+	return test_sort(__FUNCTION__, stl_sort);
 }
 
 //
@@ -191,31 +180,34 @@ err:
 //
 static int TEST_quick_sort()
 {
-	TimeUtil tu;
-	int **array;
+	return test_sort(__FUNCTION__, quick_sort);
+}
 
-	if (copy_arrays(&array, array_orig, size_1d, size_2d) != 0)
-		goto err;
+//
+// time = 406ms; when size_1d is 1 million and size_2d is 20
+// time = ; when size_1d is 10 million and size_2d is 20
+//
+static int TEST_select_sort()
+{
+	return test_sort(__FUNCTION__, select_sort);
+}
 
-	// Run
-	tu.restart();
+//
+// time = 484ms; when size_1d is 1 million and size_2d is 20
+// time = ; when size_1d is 10 million and size_2d is 20
+//
+static int TEST_merge_sort()
+{
+	return test_sort(__FUNCTION__, merge_sort);
+}
 
-	for (int iii = 0; iii < size_1d; iii++)
-		quick_sort(array[iii], size_2d);
-
-	tu.stop();
-
-	if (compare_array(array, array_expected, size_1d, size_2d) != 0)
-		goto err;
-
-	cout << __FUNCTION__ << "  total run time=" << tu.get_total_run_time() << "ms" << endl;
-
-	free(array);
-	return 0;
-
-err:
-	free(array);
-	return -1;
+//
+// time = 525ms; when size_1d is 1 million and size_2d is 20
+// time = ; when size_1d is 10 million and size_2d is 20
+//
+static int TEST_bubble_sort()
+{
+	return test_sort(__FUNCTION__, bubble_sort);
 }
 
 static int init()
@@ -258,6 +250,15 @@ int main()
 		return -1;
 
 	if (TEST_quick_sort() != 0)
+		return -1;
+
+	if (TEST_select_sort() != 0)
+		return -1;
+
+	if (TEST_merge_sort() != 0)
+		return -1;
+
+	if (TEST_bubble_sort() != 0)
 		return -1;
 
 	done();

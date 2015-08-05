@@ -1,6 +1,8 @@
 #include "sort.h"
 
 #include <stdlib.h>
+#include <string.h>
+
 #include <iostream>
 
 using namespace std;
@@ -55,4 +57,100 @@ void insert_sort(int a[], const int size)
 	}
 }
 
+// Sort from small to big
+void select_sort(int a[], const int size)
+{
+	int max, max_index, tmp;
+
+	for (int iii = size - 1; iii >= 1; iii--) {
+		max = a[0];
+		max_index = 0;
+
+		for (int jjj = 1; jjj <= iii; jjj++) {
+			if (a[jjj] > max) {
+				max = a[jjj];
+				max_index = jjj;
+			}
+		}
+
+		tmp = a[iii];
+		a[iii] = max;
+		a[max_index] = tmp;
+	}
+}
+
+// Sort from small to big
+void bubble_sort(int a[], const int size)
+{
+	int tmp;
+	bool is_sorted;
+
+	for (int iii = size - 1; iii >= 1; iii--) {
+		is_sorted = true;
+		for (int jjj = 0; jjj < iii; jjj++) {
+			if (a[jjj] > a[jjj + 1]) {
+				tmp = a[jjj];
+				a[jjj] = a[jjj + 1];
+				a[jjj + 1] = tmp;
+
+				is_sorted = false;
+			}
+		}
+		if (is_sorted)
+			break;
+	}
+}
+
+void merge(int a[], int b[], const int left, const int right)
+{
+	int middle, li, ri, i;
+
+	middle = (left + right) / 2;
+	li = left;
+	ri = middle + 1;
+	i = 0;
+
+	while (li <= middle && ri <= right) {
+		if (a[li] < a[ri])
+			b[i++] = a[li++];
+		else
+			b[i++] = a[ri++];
+	}
+
+	while (li <= middle)
+		b[i++] = a[li++];
+	while (ri <= right)
+		b[i++] = a[ri++];
+}
+
+void copy(int dst[], int dleft, int src[], int sleft, int sright)
+{
+	memcpy(dst + dleft, src + sleft, sizeof(int) * (sright - sleft + 1));
+}
+
+#define ARRAY_MAX_SIZE 1000000
+
+void _merge_sort(int a[], const int left, const int right)
+{
+	static int b[ARRAY_MAX_SIZE];
+
+	int middle;
+
+	if (left >= right)
+		return;
+
+	middle = (left + right) / 2;
+
+	_merge_sort(a, left, middle);
+	_merge_sort(a, middle + 1, right);
+
+	merge(a, b, left, right);
+	copy(a, left, b, 0, right - left);
+}
+
+// Sort from small to big
+void merge_sort(int a[], const int size)
+{
+	_merge_sort(a, 0, size - 1);
+}
 

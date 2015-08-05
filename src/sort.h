@@ -7,5 +7,14 @@ void quick_sort(int a[], const int size);
 // Sort from small to big
 void insert_sort(int a[], const int size);
 
+// Sort from small to big
+void bubble_sort(int a[], const int size);
+
+// Sort from small to big
+void select_sort(int a[], const int size);
+
+// Sort from small to big
+void merge_sort(int a[], const int size);
+
 
 #endif
