@@ -101,11 +101,10 @@ void bubble_sort(int a[], const int size)
 	}
 }
 
-void merge(int a[], int b[], const int left, const int right)
+void merge(int a[], int b[], const int left, const int middle, const int right)
 {
-	int middle, li, ri, i;
+	int li, ri, i;
 
-	middle = (left + right) / 2;
 	li = left;
 	ri = middle + 1;
 	i = 0;
@@ -128,12 +127,31 @@ void copy(int dst[], int dleft, int src[], int sleft, int sright)
 	memcpy(dst + dleft, src + sleft, sizeof(int) * (sright - sleft + 1));
 }
 
-#define ARRAY_MAX_SIZE 1000000
-
-void _merge_sort(int a[], const int left, const int right)
+void merge_sort_iteratively(int a[], const int size)
 {
-	static int b[ARRAY_MAX_SIZE];
+	int n, iii;
+	int *b = (int *)malloc(size * sizeof(int));
 
+	n = 2;
+	while (n < size) {
+		for (iii = 0; iii + n - 1 < size; iii += n) {
+			merge(a, b, iii, iii + (n - 1 ) / 2, iii + n - 1);
+			copy(a, iii, b, 0, n - 1);
+		}
+		if (iii < size) {
+			merge(a, b, iii, iii + (n / 2 - 1), size - 1);
+			copy(a, iii, b, 0, size - 1 - iii);
+		}
+		n *= 2;
+	}
+	merge(a, b, 0, n / 2 - 1, size - 1);
+	copy(a, 0, b, 0, size - 1);
+
+	free(b);
+}
+
+void _merge_sort(int a[], int b[], const int left, const int right)
+{
 	int middle;
 
 	if (left >= right)
@@ -141,16 +159,19 @@ void _merge_sort(int a[], const int left, const int right)
 
 	middle = (left + right) / 2;
 
-	_merge_sort(a, left, middle);
-	_merge_sort(a, middle + 1, right);
+	_merge_sort(a, b, left, middle);
+	_merge_sort(a, b, middle + 1, right);
 
-	merge(a, b, left, right);
+	merge(a, b, left, middle, right);
 	copy(a, left, b, 0, right - left);
 }
 
 // Sort from small to big
 void merge_sort(int a[], const int size)
 {
-	_merge_sort(a, 0, size - 1);
-}
+	int *b = (int *)malloc(size * sizeof(int));
 
+	_merge_sort(a, b, 0, size - 1);
+
+	free(b);
+}
