@@ -2,8 +2,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-
-#include <iostream>
 #include <stack>
 
 using std::stack;
@@ -39,9 +37,50 @@ void quick_sort(int a[], const int size)
 	_quick_sort(a, 0, size - 1);
 }
 
+inline int swap(int *a, int *b)
+{
+	int tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+int partition(int a[], const int orig_left, int orig_right)
+{
+	int pivot = a[orig_right];
+	int left = orig_left - 1;
+
+	for (int iii = orig_left; iii <= orig_right - 1; iii++) {
+		if (a[iii] < pivot) {
+			left++;
+			swap(&a[left], &a[iii]);
+		}
+	}
+	left++;
+	swap(&a[left], &a[orig_right]);
+
+	return left;
+}
+
+void _quick_sort2(int a[], const int left, const int right)
+{
+	if (left < right) {
+		int p = partition(a, left, right);
+		_quick_sort2(a, left, p - 1);
+		_quick_sort2(a, p + 1, right);
+	}
+}
+
+//
+// Refer: https://en.wikipedia.org/wiki/Quicksort
+//
+void quick_sort2(int a[], const int size)
+{
+	_quick_sort2(a, 0, size - 1);
+}
+
 void quick_sort_iteratively(int a[], const int size)
 {
-	int left, right, guard, left_orig, right_orig;
+	int left, right, guard, orig_left, orig_right;
 	stack<int> ids;
 
 	ids.push(size - 1);
@@ -54,8 +93,8 @@ void quick_sort_iteratively(int a[], const int size)
 		ids.pop();
 
 		guard = a[left];
-		left_orig = left;
-		right_orig = right;
+		orig_left = left;
+		orig_right = right;
 
 		while (left < right) {
 			while (left < right && a[right] > guard)
@@ -69,13 +108,58 @@ void quick_sort_iteratively(int a[], const int size)
 
 		a[left] = guard;
 
-		if (left_orig < left - 1) {
+		if (orig_left < left - 1) {
 			ids.push(left - 1);
-			ids.push(left_orig);
+			ids.push(orig_left);
 		}
-		if (left + 1 < right_orig) {
-			ids.push(right_orig);
+		if (left + 1 < orig_right) {
+			ids.push(orig_right);
 			ids.push(left + 1);
+		}
+	}
+}
+
+//
+// Do not use stack
+// Refer: http://www.geeksforgeeks.org/iterative-quick-sort/
+//
+// Faster than quick_sort_iteratively();
+//
+void quick_sort_iteratively2(int a[], const int size)
+{
+	int left, right, guard, orig_left, orig_right, top;
+	int ids[size];
+
+	top = 0;
+	ids[top++] = 0;
+	ids[top++] = size - 1;
+
+	while (top) {
+		right = ids[--top];
+		left = ids[--top];
+		guard = a[left];
+		orig_left = left;
+		orig_right = right;
+
+		while (left < right) {
+			while (left < right && a[right] > guard)
+				right--;
+			a[left] = a[right];
+
+			while (left < right && a[left] <= guard)
+				left++;
+			a[right] = a[left];
+		}
+
+		a[left] = guard;
+
+		if (orig_left < left - 1) {
+			ids[top++] = orig_left;
+			ids[top++] = left - 1;
+		}
+		if (left + 1 < orig_right) {
+			ids[top++] = left + 1;
+			ids[top++] = orig_right;
 		}
 	}
 }

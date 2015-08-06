@@ -24,6 +24,8 @@ using std::queue;
 using std::string;
 using std::stringstream;
 
+typedef void (* SortFunction)(int a[], const int size);
+
 struct ArrSize {
 	int size_1d;
 	int size_2d;
@@ -136,8 +138,6 @@ static void print_array(int **a, int size_1d, int size_2d)
 	cout << endl;
 }
 
-typedef void (* SortFunction)(int a[], const int size);
-
 static int test_sort(const char *function_name, SortFunction sort_f)
 {
 	TimeUtil tu;
@@ -171,10 +171,6 @@ err:
 	return -1;
 }
 
-//
-// time = 187ms; when size_1d is 1 million and size_2d is 20
-// time = 1892ms; when size_1d is 10 million and size_2d is 20
-//
 static int TEST_insert_sort()
 {
 	return test_sort(__FUNCTION__, insert_sort);
@@ -185,64 +181,46 @@ static void stl_sort(int a[], const int size)
 	std::sort(a, a + size);
 }
 
-//
-// time = 250ms; when size_1d is 1 million and size_2d is 20
-// time = 2456ms; when size_1d is 10 million and size_2d is 20
-//
 static int TEST_stl_sort()
 {
 	return test_sort(__FUNCTION__, stl_sort);
 }
 
-//
-// time = 310ms; when size_1d is 1 million and size_2d is 20
-// time = 3134ms; when size_1d is 10 million and size_2d is 20
-//
 static int TEST_quick_sort()
 {
 	return test_sort(__FUNCTION__, quick_sort);
 }
 
-//
-// time = ; when size_1d is 1 million and size_2d is 20
-// time = ; when size_1d is 10 million and size_2d is 20
-//
+static int TEST_quick_sort2()
+{
+	return test_sort(__FUNCTION__, quick_sort2);
+}
+
 static int TEST_quick_sort_iteratively()
 {
 	return test_sort(__FUNCTION__, quick_sort_iteratively);
 }
 
-//
-// time = 406ms; when size_1d is 1 million and size_2d is 20
-// time = ; when size_1d is 10 million and size_2d is 20
-//
-static int TEST_select_sort()
+static int TEST_quick_sort_iteratively2()
 {
+	return test_sort(__FUNCTION__, quick_sort_iteratively2);
+}
+
+static int TEST_select_sort()
+
 	return test_sort(__FUNCTION__, select_sort);
 }
 
-//
-// time = ; when size_1d is 1 million and size_2d is 20
-// time = ; when size_1d is 10 million and size_2d is 20
-//
 static int TEST_merge_sort_iteratively()
 {
 	return test_sort(__FUNCTION__, merge_sort_iteratively);
 }
 
-//
-// time = 484ms; when size_1d is 1 million and size_2d is 20
-// time = ; when size_1d is 10 million and size_2d is 20
-//
 static int TEST_merge_sort()
 {
 	return test_sort(__FUNCTION__, merge_sort);
 }
 
-//
-// time = 525ms; when size_1d is 1 million and size_2d is 20
-// time = ; when size_1d is 10 million and size_2d is 20
-//
 static int TEST_bubble_sort()
 {
 	return test_sort(__FUNCTION__, bubble_sort);
@@ -306,7 +284,13 @@ int main()
 		if (TEST_quick_sort() != 0)
 			return -1;
 
+		if (TEST_quick_sort2() != 0)
+			return -1;
+
 		if (TEST_quick_sort_iteratively() != 0)
+			return -1;
+
+		if (TEST_quick_sort_iteratively2() != 0)
 			return -1;
 
 		if (TEST_select_sort() != 0)
@@ -325,7 +309,7 @@ int main()
 	}
 
 	cout << endl;
-	cout << __FILE__ << "  total run time=" << tu.get_run_time() << " ms" << endl;
+	cout << __FILE__ << "  total run time = " << tu.get_run_time() << " ms" << endl;
 
 	return 0;
 }
@@ -334,49 +318,57 @@ int main()
 
 Test data:
 
-It takes 671.118 ms to generate arrays: 1000000 * 20
+It takes 682.663 ms to generate arrays: 1000000 * 20
 
-              TEST_insert_sort  total run time =        185 ms  when arrays is:      1000000 * 20
-                 TEST_stl_sort  total run time =        252 ms  when arrays is:      1000000 * 20
-               TEST_quick_sort  total run time =        319 ms  when arrays is:      1000000 * 20
-   TEST_quick_sort_iteratively  total run time =        523 ms  when arrays is:      1000000 * 20
-              TEST_select_sort  total run time =        414 ms  when arrays is:      1000000 * 20
-   TEST_merge_sort_iteratively  total run time =        475 ms  when arrays is:      1000000 * 20
-               TEST_merge_sort  total run time =        487 ms  when arrays is:      1000000 * 20
-              TEST_bubble_sort  total run time =        535 ms  when arrays is:      1000000 * 20
+              TEST_insert_sort  total run time =        193 ms  when arrays is:      1000000 * 20
+                 TEST_stl_sort  total run time =        257 ms  when arrays is:      1000000 * 20
+               TEST_quick_sort  total run time =        332 ms  when arrays is:      1000000 * 20
+              TEST_quick_sort2  total run time =        370 ms  when arrays is:      1000000 * 20
+   TEST_quick_sort_iteratively  total run time =        529 ms  when arrays is:      1000000 * 20
+  TEST_quick_sort_iteratively2  total run time =        338 ms  when arrays is:      1000000 * 20
+              TEST_select_sort  total run time =        452 ms  when arrays is:      1000000 * 20
+   TEST_merge_sort_iteratively  total run time =        495 ms  when arrays is:      1000000 * 20
+               TEST_merge_sort  total run time =        544 ms  when arrays is:      1000000 * 20
+              TEST_bubble_sort  total run time =        590 ms  when arrays is:      1000000 * 20
 
-It takes 6780.94 ms to generate arrays: 10000000 * 20
+It takes 7470.2 ms to generate arrays: 10000000 * 20
 
-              TEST_insert_sort  total run time =       1871 ms  when arrays is:     10000000 * 20
-                 TEST_stl_sort  total run time =       2478 ms  when arrays is:     10000000 * 20
-               TEST_quick_sort  total run time =       3130 ms  when arrays is:     10000000 * 20
-   TEST_quick_sort_iteratively  total run time =       5214 ms  when arrays is:     10000000 * 20
-              TEST_select_sort  total run time =       4174 ms  when arrays is:     10000000 * 20
-   TEST_merge_sort_iteratively  total run time =       4757 ms  when arrays is:     10000000 * 20
-               TEST_merge_sort  total run time =       4952 ms  when arrays is:     10000000 * 20
-              TEST_bubble_sort  total run time =       5691 ms  when arrays is:     10000000 * 20
+              TEST_insert_sort  total run time =       1982 ms  when arrays is:     10000000 * 20
+                 TEST_stl_sort  total run time =       2731 ms  when arrays is:     10000000 * 20
+               TEST_quick_sort  total run time =       3328 ms  when arrays is:     10000000 * 20
+              TEST_quick_sort2  total run time =       3680 ms  when arrays is:     10000000 * 20
+   TEST_quick_sort_iteratively  total run time =       5510 ms  when arrays is:     10000000 * 20
+  TEST_quick_sort_iteratively2  total run time =       3274 ms  when arrays is:     10000000 * 20
+              TEST_select_sort  total run time =       4490 ms  when arrays is:     10000000 * 20
+   TEST_merge_sort_iteratively  total run time =       4875 ms  when arrays is:     10000000 * 20
+               TEST_merge_sort  total run time =       4989 ms  when arrays is:     10000000 * 20
+              TEST_bubble_sort  total run time =       5452 ms  when arrays is:     10000000 * 20
 
-It takes 840.958 ms to generate arrays: 100000 * 200
+It takes 836.393 ms to generate arrays: 100000 * 200
 
-              TEST_insert_sort  total run time =        692 ms  when arrays is:       100000 * 200
-                 TEST_stl_sort  total run time =        443 ms  when arrays is:       100000 * 200
-               TEST_quick_sort  total run time =        543 ms  when arrays is:       100000 * 200
-   TEST_quick_sort_iteratively  total run time =        577 ms  when arrays is:       100000 * 200
-              TEST_select_sort  total run time =       1660 ms  when arrays is:       100000 * 200
-   TEST_merge_sort_iteratively  total run time =        762 ms  when arrays is:       100000 * 200
-               TEST_merge_sort  total run time =        831 ms  when arrays is:       100000 * 200
-              TEST_bubble_sort  total run time =       3745 ms  when arrays is:       100000 * 200
+              TEST_insert_sort  total run time =        678 ms  when arrays is:       100000 * 200
+                 TEST_stl_sort  total run time =        447 ms  when arrays is:       100000 * 200
+               TEST_quick_sort  total run time =        530 ms  when arrays is:       100000 * 200
+              TEST_quick_sort2  total run time =        555 ms  when arrays is:       100000 * 200
+   TEST_quick_sort_iteratively  total run time =        561 ms  when arrays is:       100000 * 200
+  TEST_quick_sort_iteratively2  total run time =        524 ms  when arrays is:       100000 * 200
+              TEST_select_sort  total run time =       1470 ms  when arrays is:       100000 * 200
+   TEST_merge_sort_iteratively  total run time =        708 ms  when arrays is:       100000 * 200
+               TEST_merge_sort  total run time =        769 ms  when arrays is:       100000 * 200
+              TEST_bubble_sort  total run time =       4156 ms  when arrays is:       100000 * 200
 
-It takes 10676.6 ms to generate arrays: 100000 * 2000
+It takes 10186.8 ms to generate arrays: 100000 * 2000
 
-              TEST_insert_sort  total run time =      55853 ms  when arrays is:       100000 * 2000
-                 TEST_stl_sort  total run time =       6098 ms  when arrays is:       100000 * 2000
-               TEST_quick_sort  total run time =       7524 ms  when arrays is:       100000 * 2000
-   TEST_quick_sort_iteratively  total run time =       7849 ms  when arrays is:       100000 * 2000
-              TEST_select_sort  total run time =     115169 ms  when arrays is:       100000 * 2000
-   TEST_merge_sort_iteratively  total run time =       9796 ms  when arrays is:       100000 * 2000
-               TEST_merge_sort  total run time =      10914 ms  when arrays is:       100000 * 2000
-              TEST_bubble_sort  total run time =     239149 ms  when arrays is:       100000 * 2000
+              TEST_insert_sort  total run time =      57433 ms  when arrays is:       100000 * 2000
+                 TEST_stl_sort  total run time =       6619 ms  when arrays is:       100000 * 2000
+               TEST_quick_sort  total run time =       8075 ms  when arrays is:       100000 * 2000
+              TEST_quick_sort2  total run time =       8217 ms  when arrays is:       100000 * 2000
+   TEST_quick_sort_iteratively  total run time =       8120 ms  when arrays is:       100000 * 2000
+  TEST_quick_sort_iteratively2  total run time =       7543 ms  when arrays is:       100000 * 2000
+              TEST_select_sort  total run time =     110551 ms  when arrays is:       100000 * 2000
+   TEST_merge_sort_iteratively  total run time =       9181 ms  when arrays is:       100000 * 2000
+               TEST_merge_sort  total run time =      10116 ms  when arrays is:       100000 * 2000
+              TEST_bubble_sort  total run time =     477108 ms  when arrays is:       100000 * 2000
 
-sort_test.cc  total run time=528545 ms
+sort_test.cc  total run time=792900 ms
 */

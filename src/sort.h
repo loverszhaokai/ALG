@@ -5,7 +5,11 @@
 
 void quick_sort(int a[], const int size);
 
+void quick_sort2(int a[], const int size);
+
 void quick_sort_iteratively(int a[], const int size);
+
+void quick_sort_iteratively2(int a[], const int size);
 
 void insert_sort(int a[], const int size);
 
