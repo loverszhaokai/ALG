@@ -34,7 +34,6 @@ static void _quick_sort(int a[], const int orig_left, const int orig_right)
 	_quick_sort(a, left + 1, orig_right);
 }
 
-// Sort from small to big
 void quick_sort(int a[], const int size)
 {
 	_quick_sort(a, 0, size - 1);
@@ -81,7 +80,6 @@ void quick_sort_iteratively(int a[], const int size)
 	}
 }
 
-// Sort from small to big
 void insert_sort(int a[], const int size)
 {
 	int guard;
@@ -98,7 +96,6 @@ void insert_sort(int a[], const int size)
 	}
 }
 
-// Sort from small to big
 void select_sort(int a[], const int size)
 {
 	int max, max_index, tmp;
@@ -120,7 +117,6 @@ void select_sort(int a[], const int size)
 	}
 }
 
-// Sort from small to big
 void bubble_sort(int a[], const int size)
 {
 	int tmp;
@@ -168,6 +164,7 @@ void copy(int dst[], int dleft, int src[], int sleft, int sright)
 	memcpy(dst + dleft, src + sleft, sizeof(int) * (sright - sleft + 1));
 }
 
+// Refer: https://en.wikipedia.org/wiki/Merge_sort
 void merge_sort_iteratively(int a[], const int size)
 {
 	int n, iii;
@@ -207,7 +204,6 @@ void _merge_sort(int a[], int b[], const int left, const int right)
 	copy(a, left, b, 0, right - left);
 }
 
-// Sort from small to big
 void merge_sort(int a[], const int size)
 {
 	int *b = (int *)malloc(size * sizeof(int));
