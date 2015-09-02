@@ -1,3 +1,18 @@
+/*
+   ALG
+   --------------------------------
+
+   Copyright 2015 Kai Zhao <loverszhao@gmail.com>
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   This file contains the basic time functions
+ */
+
 #ifndef _ALG_TEST_TIME_UTIL_H_
 #define _ALG_TEST_TIME_UTIL_H_
 
