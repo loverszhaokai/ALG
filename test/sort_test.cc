@@ -1,16 +1,16 @@
 /*
-   ALG
-   --------------------------------
-
-   Copyright 2015 Kai Zhao <loverszhao@gmail.com>
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   This file contains the test of sort algorithms
+ * ALG
+ * --------------------------------
+ *
+ * Copyright 2015 Kai Zhao
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This file contains the test of sort algorithms
  */
 
 // Refer: http://bbs.byr.cn/#!article/ACM_ICPC/87550?p=1
