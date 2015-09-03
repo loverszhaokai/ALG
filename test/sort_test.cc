@@ -229,10 +229,15 @@ int main()
 
 	const struct ArrSize arr_sizes [] = {
 		{ 1000000, 20 },         // 1   million  * 20           = 20  million
-		{ 10000000, 20 },        // 10  million  * 20           = 200 million
 
-		{ 100000, 200 },         // 100 thousand * 200          = 20  million
-		{ 100000, 2000 },        // 100 thousand * 2000         = 200 million
+// Why comment the following test vectors ?
+// Because they are slow, if you want test the sort algorithms, you
+// can uncomment the follwing test vectors
+
+//		{ 10000000, 20 },        // 10  million  * 20           = 200 million
+
+//		{ 100000, 200 },         // 100 thousand * 200          = 20  million
+//		{ 100000, 2000 },        // 100 thousand * 2000         = 200 million
 	};
 
 	const struct TestFunction test_funs [] = {
