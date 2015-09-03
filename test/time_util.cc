@@ -10,7 +10,7 @@
 
        http://www.apache.org/licenses/LICENSE-2.0
 
-   This file contains the basic test functions
+   This file contains the basic time functions
  */
 
 #include "time_util.h"
