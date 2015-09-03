@@ -50,3 +50,7 @@ Includes quick sort, insert sort, select sort, bubble sort, and merge sort
 
 Randomly shuffle all the value in the array. Must ensure that every value has the same probability
 of existing in all the positions of the array
+
+### 2.6 dijkstra
+
+Dijkstra algorithms
