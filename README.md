@@ -20,7 +20,7 @@ Includes **recursively** and **iteratively** algorithms of preorder, inorder and
 
 ### 2.2 combinations
 
-Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.
+Given two integers n and k, return all possible combinations of k numbers out of 1 ... n
 ```C
  For example,
  If n = 4 and k = 2, a solution is:
@@ -44,5 +44,9 @@ From leetcode: https://leetcode.com/problems/majority-element/
 
 ### 2.4 sort
 
-Includes quick sort, insert sort, select sort, bubble sort, and merge sort.
+Includes quick sort, insert sort, select sort, bubble sort, and merge sort
 
+### 2.5 random shuffle
+
+Randomly shuffle all the value in the array. Must ensure that every value has the same probability
+of existing in all the positions of the array
