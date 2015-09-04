@@ -54,3 +54,7 @@ of existing in all the positions of the array
 ### 2.6 dijkstra
 
 Dijkstra algorithms
+
+### 2.7 floyd
+
+Floyd algorithms

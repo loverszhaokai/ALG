@@ -1,6 +1,7 @@
 AM_CPPFLAGS = -I ../src
 
-TESTS = combinations_test dijkstra_test major_element_test random_shuffle_test \
+TESTS = combinations_test dijkstra_test floyd_test \
+        major_element_test random_shuffle_test \
         sort_test tree_traversal_test
 
 check_PROGRAMS = 
@@ -15,6 +16,9 @@ combinations_test_LDADD = $(top_builddir)/src/libcombinations.la libtest.la
 dijkstra_test_SOURCES = dijkstra_test.cc matrix.h $(top_builddir)/src/dijkstra.h
 dijkstra_test_LDADD = $(top_builddir)/src/libdijkstra.la libtest.la libmatrix.la
 
+floyd_test_SOURCES = floyd_test.cc $(top_builddir)/src/floyd.h
+floyd_test_LDADD = $(top_builddir)/src/libfloyd.la libtest.la libmatrix.la
+
 major_element_test_SOURCES = major_element_test.cc $(top_builddir)/src/major_element.h
 major_element_test_LDADD = $(top_builddir)/src/libmajor_element.la libtest.la
 
@@ -27,5 +31,6 @@ sort_test_LDADD = $(top_builddir)/src/libsort.la libtest.la
 tree_traversal_test_SOURCES = test.h tree_traversal_test.cc $(top_builddir)/src/tree_traversal.h
 tree_traversal_test_LDADD = $(top_builddir)/src/libtree_traversal.la libtest.la
 
-check_PROGRAMS += combinations_test dijkstra_test major_element_test random_shuffle_test \
+check_PROGRAMS += combinations_test dijkstra_test floyd_test \
+                  major_element_test random_shuffle_test \
                   sort_test tree_traversal_test
