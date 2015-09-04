@@ -16,7 +16,8 @@
 #ifndef _ALG_SRC_DIJKSTRA_H_
 #define _ALG_SRC_DIJKSTRA_H_
 
-void shortest_path_kai(int **matrix, const int N, const int start);
+void dijkstra_wiki(const int **matrix, const int N, const int start, int *out);
 
+void shortest_path_kai(const int **matrix, const int N, const int start, int *out);
 
 #endif

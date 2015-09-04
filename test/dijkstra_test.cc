@@ -31,12 +31,13 @@
 using std::cout;
 using std::endl;
 
-typedef void (* DIJK_FUNCTION)(int **, const int, const int);
+typedef void (* DIJK_FUNCTION)(const int **, const int, const int, int*);
 
 const struct TestFunction {
 	const char *fname;
 	DIJK_FUNCTION dijk_fun;
 } test_funts [] = {
+	{ "dijkstra_wiki", dijkstra_wiki },
 	{ "shortest_path_kai", shortest_path_kai },
 };
 
@@ -181,15 +182,6 @@ static void print_matrix(int **matrix, const int N)
 	cout << "count=" << count << endl;
 }
 
-static int compare_matrix(int **l_matrix, const int expected_matrix[MAX_SIZE][MAX_SIZE], const int N)
-{
-	for (int iii = 0; iii < N; iii++)
-		for (int jjj = 0; jjj < N; jjj++)
-			if (l_matrix[iii][jjj] != expected_matrix[iii][jjj])
-				return -1;
-	return 0;
-}
-
 /*
  * Return 0 if the dijkstra algorithms are right, otherwise return -1
  */
@@ -198,7 +190,7 @@ static int test_right()
 	const struct TestCase {
 		int N;
 		int matrix[MAX_SIZE][MAX_SIZE];
-		int expected_matrix[MAX_SIZE][MAX_SIZE];
+		int expected_out[MAX_SIZE];
 	} test_cases[] = {
 		{
 			6,
@@ -210,14 +202,7 @@ static int test_right()
 				{ -1, -1, -1,  6, -1,  9 },
 				{ 14, -1,  2, -1,  9, -1 },
 			},
-			{
-				{ -1,  1,  9, 16, 20, 11 },
-				{  1, -1, 10, 15, -1, -1 },
-				{  9, 10, -1, 11, -1,  2 },
-				{ 16, 15, 11, -1,  6, -1 },
-				{ 20, -1, -1,  6, -1,  9 },
-				{ 11, -1,  2, -1,  9, -1 },
-			},
+			{ -1,  1,  9, 16, 20, 11 },
 		},
 		{
 			5,
@@ -228,13 +213,7 @@ static int test_right()
 				{ 1000, -1,  5,   -1,  6 },
 				{   -1, -1, -1,    6, -1 },
 			},
-			{
-				{   -1,  3,  7,   12, 18 },
-				{    3, -1,  4,   -1, -1 },
-				{    7,  4, -1,    5, -1 },
-				{   12, -1,  5,   -1,  6 },
-				{   18, -1, -1,    6, -1 },
-			},
+			{   -1,  3,  7,   12, 18 },
 		},
 	};
 
@@ -242,20 +221,21 @@ static int test_right()
 
 		int **matrix;
 		const struct TestCase &tc = test_cases[iii];
+		int out[tc.N];
 
 		if (create_matrix(&matrix, tc.N) != 0)
 			return -1;
+
+		// Copy tc.matrix to matrix
+		copy_matrix(matrix, tc.matrix, tc.N);
 
 		for (int jjj = 0; jjj < sizeof(test_funts) / sizeof(TestFunction); jjj++) {
 
 			const TestFunction &test_f = test_funts[jjj];
 
-			// Copy tc.matrix to matrix
-			copy_matrix(matrix, tc.matrix, tc.N);
+			test_f.dijk_fun((const int **)matrix, tc.N, 0, out);
 
-			test_f.dijk_fun(matrix, tc.N, 0);
-
-			if (compare_matrix(matrix, tc.expected_matrix, tc.N) != 0) {
+			if (!std::equal(tc.expected_out, tc.expected_out + tc.N, out)) {
 				cout << "test_right() function:" << test_f.fname << " case:"
 					<< iii + 1 << " failed" << endl;
 				print_matrix(matrix, tc.N);
@@ -291,13 +271,15 @@ static int test_performance()
 	for (int iii = 0; iii < sizeof(test_cases) / sizeof(TestCase); iii++) {
 
 		const TestCase &tc = test_cases[iii];
+		int out[tc.N];
+		int pre_out[tc.N];
 
 		if (create_matrix(&matrix, tc.N) != 0)
 			return -1;
 
 		init_matrix(matrix, tc.N, tc.M, tc.max_value);
 
-		cout << std::setw(15) << "Function"
+		cout << std::setw(20) << "Function"
 			<< std::setw(20) << "Total Run Time"
 			<< std::setw(15) << "N"
 			<< std::setw(15) << "M" << endl;
@@ -307,24 +289,32 @@ static int test_performance()
 		for (int jjj = 0; jjj < sizeof(test_funts) / sizeof(TestFunction); jjj++) {
 
 			const TestFunction &test_f = test_funts[jjj];
-			int **new_matrix;
-
-			if (copy_matrix(&new_matrix, matrix, tc.N) != 0)
-				return -1;
 
 			tu.restart();
 
-			test_f.dijk_fun(matrix, tc.N, 0);
+			test_f.dijk_fun((const int **)matrix, tc.N, 0, out);
 
 			tu.stop();
 
-			free_matrix(new_matrix, tc.N);
+			if (jjj != 0) {
+				// Compare out and pre_out
+				if (!std::equal(out, out + tc.N, pre_out)) {
+					cout << "test_right() function:" << test_f.fname << " case:"
+						<< iii + 1 << " failed" << endl;
+					print_matrix(matrix, tc.N);
+					return -1;
+				}
+			}
 
-			cout << std::setw(15) << test_f.fname
+			// Copy out to pre_out
+			memcpy((char *)pre_out, (char *)out, tc.N * sizeof(int));
+
+			cout << std::setw(20) << test_f.fname
 				<< std::setw(17) << (int)tu.get_total_run_time() << " ms"
 				<< std::setw(15) << tc.N
-				<< std::setw(15) << tc.M << endl << endl;
+				<< std::setw(15) << tc.M << endl;
 		}
+		cout << endl;
 
 		free_matrix(matrix, tc.N);
 	}
