@@ -25,8 +25,7 @@
 #include "test.h"
 #include "time_util.h"
 #include "dijkstra.h"
-
-#define MAX_SIZE 100
+#include "matrix.h"
 
 using std::cout;
 using std::endl;
@@ -42,155 +41,14 @@ const struct TestFunction {
 };
 
 /*
- * Create a N*N matrix
- */
-static int create_matrix(int ***matrix, const int N)
-{
-	*matrix = NULL;
-	if ((*matrix = (int **)malloc(N * sizeof(**matrix))) == NULL) {
-		perror("malloc() failed");
-		return -1;
-	}
-
-	for (int iii = 0; iii < N; iii++) {
-		(*matrix)[iii] = (int *)malloc(N * sizeof(***matrix));
-		if ((*matrix)[iii] == NULL) {
-			perror("malloc() failed");
-			return -1;
-		}
-	}
-
-	return 0;
-}
-
-/*
- * Copy src matrix to dst matrix
- */
-static int copy_matrix(int ***dst_matrix, int **src_matrix, const int N)
-{
-	if (create_matrix(dst_matrix, N) != 0)
-		return -1;
-
-	for (int iii = 0; iii < N; iii++)
-		for (int jjj = 0; jjj < N; jjj++)
-			(*dst_matrix)[iii][jjj] = src_matrix[iii][jjj];
-
-	return 0;
-}
-
-static void copy_matrix(int **dst_matrix, const int src_matrix[MAX_SIZE][MAX_SIZE], const int N)
-{
-	for (int iii = 0; iii < N; iii++)
-		for (int jjj = 0; jjj < N; jjj++)
-			dst_matrix[iii][jjj] = src_matrix[iii][jjj];
-}
-
-/*
- * Randomly select n elements from arr, put the n elements into arr[0] ~ arr[n - 1]
- */
-static void random_shuffle(int arr[], const int size, const int n)
-{
-	int tmp, r, step;
-
-	for (int iii = 0; iii < size; iii++)
-		arr[iii] = iii;
-
-	for (int iii = 1; iii <= n; iii++) {
-		step = size - iii;
-		r = iii + rand() % step;
-
-		tmp = arr[iii - 1];
-		arr[iii - 1] = arr[r];
-		arr[r] = tmp;
-	}
-}
-
-/*
- * The matrix is N * N, and there are M bidirectional roads, the value of the each
- * road is from 0 to max_value, including 0 and max_value
- */
-static void init_matrix(int **matrix, const int N, const int M, const int max_value)
-{
-	// The number of selected roads, which is smaller than M, and finally count will
-	// be equal to M
-	int count = 0;
-	// The number of all the possible roads, thus it is C(N,2)
-	const int all_roads = N * (N - 1) / 2;
-	// The number of roads for each vertex
-	int nroads = 0;
-	// Used to randomly select indexs
-	int index[N];
-	// Random values which is between 0 and max_value - 1
-	int value;
-	int kkk;
-
-	for (int iii = 0; iii < N; iii++) {
-		for (int jjj = 0; jjj < N; jjj++)
-			matrix[iii][jjj] = -1;
-	}
-
-	for (int iii = 0; iii < N - 1; iii++) {
-		// Randomly select nroads for iii from (iii + 1) to (N - 1)
-		nroads = (M * (N - 1 - iii)) / all_roads;
-		if ((M * (N - 1 - iii)) % all_roads != 0)
-			nroads++;
-
-		if (count + nroads > M)
-			nroads = M - count;
-
-		random_shuffle(index, N - iii - 1, nroads);
-
-		for (int jjj = 0; jjj < nroads; jjj++) {
-
-			kkk = index[jjj] + iii + 1;
-
-			value = rand() % max_value;
-			matrix[iii][ kkk ] = value;
-			matrix[kkk][iii] = value;
-		}
-
-		count += nroads;
-		if (count == M)
-			break;
-	}
-}
-
-static void free_matrix(int **matrix, const int N)
-{
-	for (int iii = 0; iii < N; iii++)
-		free(matrix[iii]);
-	free(matrix);
-}
-
-static void print_matrix(int **matrix, const int N)
-{
-	cout << "\tprint_matrix()" << endl;
-
-	int count = 0;
-
-	for (int iii = 0; iii < N; iii++) {
-
-		cout << "\t" << iii << "=\t";
-		for (int jjj = 0; jjj < N; jjj++) {
-			cout << std::setw(4) << matrix[iii][jjj];
-			if (matrix[iii][jjj] != -1)
-				count++;
-		}
-		cout << endl;
-	}
-
-	cout << "count=" << count << endl;
-}
-
-/*
  * Return 0 if the dijkstra algorithms are right, otherwise return -1
  */
 static int test_right()
 {
 	const struct TestCase {
 		int N;
-		int matrix[MAX_SIZE][MAX_SIZE];
-		int expected_out[MAX_SIZE];
+		int matrix[MATRIX_MAX_SIZE][MATRIX_MAX_SIZE];
+		int expected_out[MATRIX_MAX_SIZE];
 	} test_cases[] = {
 		{
 			6,
@@ -223,11 +81,11 @@ static int test_right()
 		const struct TestCase &tc = test_cases[iii];
 		int out[tc.N];
 
-		if (create_matrix(&matrix, tc.N) != 0)
+		if (create_matrix(&matrix, tc.N, tc.N) != 0)
 			return -1;
 
 		// Copy tc.matrix to matrix
-		copy_matrix(matrix, tc.matrix, tc.N);
+		copy_matrix(matrix, tc.matrix, tc.N, tc.N);
 
 		for (int jjj = 0; jjj < sizeof(test_funts) / sizeof(TestFunction); jjj++) {
 
@@ -238,7 +96,7 @@ static int test_right()
 			if (!std::equal(tc.expected_out, tc.expected_out + tc.N, out)) {
 				cout << "test_right() function:" << test_f.fname << " case:"
 					<< iii + 1 << " failed" << endl;
-				print_matrix(matrix, tc.N);
+				print_matrix(matrix, tc.N, tc.N);
 				return -1;
 			}
 		}
@@ -256,7 +114,7 @@ static int test_performance()
 {
 	const struct TestCase {
 		const int N;
-		const int M;
+		const int R;
 		const int max_value;
 	} test_cases [] = {
 		{ 20, 30, 100 },
@@ -274,15 +132,15 @@ static int test_performance()
 		int out[tc.N];
 		int pre_out[tc.N];
 
-		if (create_matrix(&matrix, tc.N) != 0)
+		if (create_matrix(&matrix, tc.N, tc.N) != 0)
 			return -1;
 
-		init_matrix(matrix, tc.N, tc.M, tc.max_value);
+		init_matrix(matrix, tc.N, tc.R, tc.max_value);
 
 		cout << std::setw(20) << "Function"
 			<< std::setw(20) << "Total Run Time"
 			<< std::setw(15) << "N"
-			<< std::setw(15) << "M" << endl;
+			<< std::setw(15) << "R" << endl;
 		cout << "---------------------------------------------"
 				"---------------------------------------------" << endl;
 
@@ -301,7 +159,7 @@ static int test_performance()
 				if (!std::equal(out, out + tc.N, pre_out)) {
 					cout << "test_right() function:" << test_f.fname << " case:"
 						<< iii + 1 << " failed" << endl;
-					print_matrix(matrix, tc.N);
+					print_matrix(matrix, tc.N, tc.N);
 					return -1;
 				}
 			}
@@ -312,7 +170,7 @@ static int test_performance()
 			cout << std::setw(20) << test_f.fname
 				<< std::setw(17) << (int)tu.get_total_run_time() << " ms"
 				<< std::setw(15) << tc.N
-				<< std::setw(15) << tc.M << endl;
+				<< std::setw(15) << tc.R << endl;
 		}
 		cout << endl;
 

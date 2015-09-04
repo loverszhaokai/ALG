@@ -5,14 +5,15 @@ TESTS = combinations_test dijkstra_test major_element_test random_shuffle_test \
 
 check_PROGRAMS = 
 
-lib_LTLIBRARIES = libtest.la
+lib_LTLIBRARIES = libtest.la libmatrix.la
 libtest_la_SOURCES = test.h test.cc time_util.h time_util.cc
+libmatrix_la_SOURCES = matrix.h matrix.cc
 
 combinations_test_SOURCES = combinations_test.cc $(top_builddir)/src/combinations.h
 combinations_test_LDADD = $(top_builddir)/src/libcombinations.la libtest.la
 
-dijkstra_test_SOURCES = dijkstra_test.cc $(top_builddir)/src/dijkstra.h
-dijkstra_test_LDADD = $(top_builddir)/src/libdijkstra.la libtest.la
+dijkstra_test_SOURCES = dijkstra_test.cc matrix.h $(top_builddir)/src/dijkstra.h
+dijkstra_test_LDADD = $(top_builddir)/src/libdijkstra.la libtest.la libmatrix.la
 
 major_element_test_SOURCES = major_element_test.cc $(top_builddir)/src/major_element.h
 major_element_test_LDADD = $(top_builddir)/src/libmajor_element.la libtest.la
