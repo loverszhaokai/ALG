@@ -16,6 +16,8 @@
 #include <algorithm>
 #include <list>
 
+#include "../test/matrix.h"
+
 using std::list;
 
 /*
@@ -46,7 +48,7 @@ void dijkstra_wiki(const int **matrix, const int N, const int start, int *dist)
 		min_dist_v = -1;
 		for (int iii = 0; iii < N; iii++) {
 
-			if (dist[iii] == -1 || is_visited[iii])
+			if (dist[iii] == MAX_VALUE || is_visited[iii])
 				continue;
 
 			if (min_dist_v == -1) {
@@ -71,11 +73,8 @@ void dijkstra_wiki(const int **matrix, const int N, const int start, int *dist)
 			if (is_visited[iii])
 				continue;
 
-			if (matrix[min_dist_v][iii] != -1) {
-				if (dist[iii] == -1 ||
-					dist[iii] > min_dist + matrix[min_dist_v][iii])
-					dist[iii] = min_dist + matrix[min_dist_v][iii];
-			}
+			if (dist[iii] > min_dist + matrix[min_dist_v][iii])
+				dist[iii] = min_dist + matrix[min_dist_v][iii];
 		}
 	}
 }
@@ -103,13 +102,10 @@ void shortest_path_kai(const int **matrix, const int N, const int start, int *di
 		indexs.pop_front();
 
 		for (int iii = 0; iii < N; iii++) {
-			if (v == iii || start == iii || matrix[v][iii] == -1)
+			if (v == iii || start == iii || matrix[v][iii] == MAX_VALUE)
 				continue;
 
-			if (v != start)
-			if (dist[iii] == -1 ||
-				dist[iii] > dist[v] + matrix[v][iii]) {
-
+			if (dist[iii] > dist[v] + matrix[v][iii]) {
 				dist[iii] = dist[v] + matrix[v][iii];
 
 				// The distance between start and iii is updated, so we should

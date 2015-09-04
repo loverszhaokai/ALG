@@ -53,25 +53,25 @@ static int test_right()
 		{
 			6,
 			{
-				{ -1,  1,  9, -1, -1, 14 },
-				{  1, -1, 10, 15, -1, -1 },
-				{  9, 10, -1, 11, -1,  2 },
-				{ -1, 15, 11, -1,  6, -1 },
-				{ -1, -1, -1,  6, -1,  9 },
-				{ 14, -1,  2, -1,  9, -1 },
+				{ MAX_VALUE,         1,         9, MAX_VALUE, MAX_VALUE,        14 },
+				{         1, MAX_VALUE,        10,        15, MAX_VALUE, MAX_VALUE },
+				{         9,        10, MAX_VALUE,        11, MAX_VALUE,         2 },
+				{ MAX_VALUE,        15,        11, MAX_VALUE,         6, MAX_VALUE },
+				{ MAX_VALUE, MAX_VALUE, MAX_VALUE,         6, MAX_VALUE,         9 },
+				{        14, MAX_VALUE,         2, MAX_VALUE,         9, MAX_VALUE },
 			},
-			{ -1,  1,  9, 16, 20, 11 },
+			{ MAX_VALUE,  1,  9, 16, 20, 11 },
 		},
 		{
 			5,
 			{
-				{   -1,  3, -1, 1000, -1 },
-				{    3, -1,  4,   -1, -1 },
-				{   -1,  4, -1,    5, -1 },
-				{ 1000, -1,  5,   -1,  6 },
-				{   -1, -1, -1,    6, -1 },
+				{ MAX_VALUE,         3, MAX_VALUE,      1000, MAX_VALUE },
+				{         3, MAX_VALUE,         4, MAX_VALUE, MAX_VALUE },
+				{ MAX_VALUE,         4, MAX_VALUE,         5, MAX_VALUE },
+				{      1000, MAX_VALUE,         5, MAX_VALUE,         6 },
+				{ MAX_VALUE, MAX_VALUE, MAX_VALUE,         6, MAX_VALUE },
 			},
-			{   -1,  3,  7,   12, 18 },
+			{ MAX_VALUE, 3, 7, 12, 18 },
 		},
 	};
 

@@ -16,7 +16,8 @@
 #ifndef _ALG_TEST_MATRIX_H_
 #define _ALG_TEST_MATRIX_H_
 
-#define MATRIX_MAX_SIZE 1000 // The max size of matrix
+#define MATRIX_MAX_SIZE 100        // The max size of matrix
+#define MAX_VALUE       0x3fffffff // The max value of edges (2 ^ 30) - 1
 
 
 // Create a N * M matrix
@@ -27,9 +28,12 @@ int create_matrix(int ***matrix, const int N, const int M);
 // Return 0 if success, otherwise return -1
 int copy_matrix(int ***dst_matrix, int **src_matrix, const int N, const int M);
 
-// Create a dst_matrix, and copy the value of src_matrix to dst_matrix
+// Copy the value of src_matrix to dst_matrix
 void copy_matrix(int **dst_matrix, const int src_matrix[MATRIX_MAX_SIZE][MATRIX_MAX_SIZE],
 	const int N, const int M);
+
+// Copy the value of src_matrix to dst_matrix
+void copy_matrix(int **dst_matrix, const int **src_matrix, const int N, const int M);
 
 void free_matrix(int **matrix, const int N);
 
@@ -39,5 +43,13 @@ void init_matrix(int **matrix, const int N, const int R, const int max_value);
 
 void print_matrix(int **matrix, const int N, const int M);
 
+// Return 0 if the N * M matrix of l_matrix is equal to r_matrix
+// Return -1 otherwise
+int compare_matrix(const int **l_matrix, const int **r_matrix, const int N, const int M);
+
+// Return 0 if the N * M matrix of l_matrix is equal to r_matrix
+// Return -1 otherwise
+int compare_matrix(const int l_matrix[][MATRIX_MAX_SIZE], const int **r_matrix,
+	const int N, const int M);
 
 #endif

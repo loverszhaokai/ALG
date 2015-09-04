@@ -13,6 +13,7 @@
  * This file contains matrix functions and Matrix class
  */
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -62,9 +63,17 @@ int copy_matrix(int ***dst_matrix, int **src_matrix, const int N, const int M)
 	return 0;
 }
 
-// Create a dst_matrix, and copy the value of src_matrix to dst_matrix
+// Copy the value of src_matrix to dst_matrix
 void copy_matrix(int **dst_matrix, const int src_matrix[MATRIX_MAX_SIZE][MATRIX_MAX_SIZE],
 	const int N, const int M)
+{
+	for (int iii = 0; iii < N; iii++)
+		for (int jjj = 0; jjj < M; jjj++)
+			dst_matrix[iii][jjj] = src_matrix[iii][jjj];
+}
+
+// Copy the value of src_matrix to dst_matrix
+void copy_matrix(int **dst_matrix, const int **src_matrix, const int N, const int M)
 {
 	for (int iii = 0; iii < N; iii++)
 		for (int jjj = 0; jjj < M; jjj++)
@@ -113,10 +122,11 @@ void init_matrix(int **matrix, const int N, const int R, const int max_value)
 	int value;
 	int kkk;
 
-	for (int iii = 0; iii < N; iii++) {
+	assert(max_value < MAX_VALUE);
+
+	for (int iii = 0; iii < N; iii++)
 		for (int jjj = 0; jjj < N; jjj++)
-			matrix[iii][jjj] = -1;
-	}
+			matrix[iii][jjj] = MAX_VALUE;
 
 	for (int iii = 0; iii < N - 1; iii++) {
 		// Randomly select nroads for iii from (iii + 1) to (N - 1)
@@ -151,8 +161,31 @@ void print_matrix(int **matrix, const int N, const int M)
 
 		cout << "\t" << iii << "=\t";
 		for (int jjj = 0; jjj < M; jjj++) {
-			cout << std::setw(4) << matrix[iii][jjj];
+			cout << std::setw(14) << matrix[iii][jjj];
 		}
 		cout << endl;
 	}
+}
+
+// Return 0 if the N * M matrix of l_matrix is equal to r_matrix
+// Return -1 otherwise
+int compare_matrix(const int **l_matrix, const int **r_matrix, const int N, const int M)
+{
+	for (int iii = 0; iii < N; iii++)
+		for (int jjj = 0; jjj < M; jjj++)
+			if (l_matrix[iii][jjj] != r_matrix[iii][jjj])
+				return -1;
+	return 0;
+}
+
+// Return 0 if the N * M matrix of l_matrix is equal to r_matrix
+// Return -1 otherwise
+int compare_matrix(const int l_matrix[][MATRIX_MAX_SIZE], const int **r_matrix,
+	const int N, const int M)
+{
+	for (int iii = 0; iii < N; iii++)
+		for (int jjj = 0; jjj < M; jjj++)
+			if (l_matrix[iii][jjj] != r_matrix[iii][jjj])
+				return -1;
+	return 0;
 }
