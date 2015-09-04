@@ -19,9 +19,11 @@
 using std::list;
 
 /*
+ * The following algorithm is very slow and it is not based on the
+ * original dijkstra algorithm.
  * Calculate the smallest distance from start to other positions
  */
-void dijkstra(int **matrix, const int N, const int start)
+void shortest_path_kai(int **matrix, const int N, const int start)
 {
 	int is_visited[N];
 	list<int> indexs;

@@ -4,7 +4,7 @@ lib_LTLIBRARIES = libcombinations.la libdijkstra.la libmajor_element.la \
 
 libcombinations_la_SOURCES = combinations.cc combinations.h
 
-libdijkstra_la_SOURCES = dijkstra.cc
+libdijkstra_la_SOURCES = dijkstra.cc dijkstra.h
 
 libmajor_element_la_SOURCES = major_element.cc major_element.h
 

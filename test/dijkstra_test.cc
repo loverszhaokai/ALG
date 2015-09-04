@@ -24,13 +24,12 @@
 
 #include "test.h"
 #include "time_util.h"
+#include "dijkstra.h"
 
 #define MAX_SIZE 100
 
 using std::cout;
 using std::endl;
-
-void dijkstra(int **matrix, const int N, const int start);
 
 typedef void (* DIJK_FUNCTION)(int **, const int, const int);
 
@@ -38,7 +37,7 @@ const struct TestFunction {
 	const char *fname;
 	DIJK_FUNCTION dijk_fun;
 } test_funts [] = {
-	{ "dijkstra", dijkstra },
+	{ "shortest_path_kai", shortest_path_kai },
 };
 
 /*
@@ -320,12 +319,12 @@ static int test_performance()
 			tu.stop();
 
 			free_matrix(new_matrix, tc.N);
-		}
 
-		cout << std::setw(15) << "dijkstra"
-			<< std::setw(17) << (int)tu.get_total_run_time() << " ms"
-			<< std::setw(15) << tc.N
-			<< std::setw(15) << tc.M << endl << endl;
+			cout << std::setw(15) << test_f.fname
+				<< std::setw(17) << (int)tu.get_total_run_time() << " ms"
+				<< std::setw(15) << tc.N
+				<< std::setw(15) << tc.M << endl << endl;
+		}
 
 		free_matrix(matrix, tc.N);
 	}
