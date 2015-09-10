@@ -63,6 +63,10 @@ static int test_right()
 			{ 1, 21, 22, 23, 3, 4, 24 },
 			5
 		},
+		{
+			{ 9, 8, 9 },
+			2
+		},
 	};
 
 	for (int iii = 0; iii < sizeof(test_cases) / sizeof(TestCase); iii++) {

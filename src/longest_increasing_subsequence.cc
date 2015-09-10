@@ -43,6 +43,11 @@ int longest_increasing_subsequence(const std::vector<int> &nums)
 					max_len++;
 				break;
 			}
+
+			if (jjj == 0) {
+				// cnt_value is smaller than max_value[0] or equal to
+				max_value[0] = cnt_value;
+			}
 		}
 
 	}
