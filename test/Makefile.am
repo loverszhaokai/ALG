@@ -2,6 +2,7 @@ AM_CPPFLAGS = -I ../src
 AM_CXXFLAGS = -std=c++11
 
 TESTS = add_long_test combinations_test dijkstra_test floyd_test \
+        longest_increasing_subsequence_test \
         major_element_test random_shuffle_test \
         sort_test tree_traversal_test
 
@@ -24,6 +25,11 @@ dijkstra_test_LDADD = $(top_builddir)/src/libdijkstra.la libtest.la libmatrix.la
 floyd_test_SOURCES = floyd_test.cc $(top_builddir)/src/floyd.h
 floyd_test_LDADD = $(top_builddir)/src/libfloyd.la libtest.la libmatrix.la
 
+longest_increasing_subsequence_test_SOURCES = longest_increasing_subsequence_test.cc \
+                                              $(top_builddir)/src/longest_increasing_subsequence.h
+longest_increasing_subsequence_test_LDADD = $(top_builddir)/src/liblongest_increasing_subsequence.la \
+                                            libtest.la
+
 major_element_test_SOURCES = major_element_test.cc $(top_builddir)/src/major_element.h
 major_element_test_LDADD = $(top_builddir)/src/libmajor_element.la libtest.la
 
@@ -37,5 +43,6 @@ tree_traversal_test_SOURCES = test.h tree_traversal_test.cc $(top_builddir)/src/
 tree_traversal_test_LDADD = $(top_builddir)/src/libtree_traversal.la libtest.la
 
 check_PROGRAMS += add_long_test combinations_test dijkstra_test floyd_test \
+                  longest_increasing_subsequence_test \
                   major_element_test random_shuffle_test \
                   sort_test tree_traversal_test
