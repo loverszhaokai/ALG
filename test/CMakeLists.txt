@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.3)
 project(alg_test)
 
+include_directories(../src/)
+
 add_definitions(-D__STDC_CONSTANT_MACROS
         -D__STDC_FORMAT_MACROS)
 
@@ -25,5 +27,29 @@ ENDIF(CMAKE_BUILD_ASAN_TYPE MATCHES 1)
 
 add_library(alg_test STATIC test.h test.cc time_util.h time_util.cc)
 
+add_executable(add_long_test add_long_test.cc)
+target_link_libraries(add_long_test alg_test add_long list_node)
+
+add_executable(combinations_test combinations_test.cc)
+target_link_libraries(combinations_test alg_test combinations)
+
+add_executable(dijkstra_test dijkstra_test.cc matrix.cc matrix.h)
+target_link_libraries(dijkstra_test alg_test dijkstra)
+
+add_executable(floyd_test floyd_test.cc matrix.cc matrix.h)
+target_link_libraries(floyd_test alg_test floyd dijkstra)
+
+add_executable(longest_increasing_subsequence_test longest_increasing_subsequence_test.cc)
+target_link_libraries(longest_increasing_subsequence_test alg_test longest_increasing_subsequence)
+
+add_executable(major_element_test major_element_test.cc)
+target_link_libraries(major_element_test alg_test major_element)
+
 add_executable(random_shuffle_test random_shuffle_test.cc)
 target_link_libraries(random_shuffle_test alg_test random_shuffle)
+
+add_executable(sort_test sort_test.cc)
+target_link_libraries(sort_test alg_test sort)
+
+add_executable(tree_traversal_test tree_traversal_test.cc)
+target_link_libraries(tree_traversal_test alg_test tree_traversal)

@@ -26,5 +26,26 @@ ENDIF(CMAKE_BUILD_ASAN_TYPE MATCHES 1)
 
 add_subdirectory(util)
 
+
+add_library(add_long STATIC add_long.cc add_long.h)
+
+add_library(combinations STATIC combinations.cc combinations.h)
+
+add_library(dijkstra STATIC dijkstra.cc dijkstra.h)
+
+add_library(floyd STATIC floyd.cc floyd.h)
+
+add_library(list_node STATIC list_node.cc list_node.h)
+
+add_library(longest_increasing_subsequence STATIC
+            longest_increasing_subsequence.cc
+            longest_increasing_subsequence.h)
+
+add_library(major_element STATIC major_element.cc major_element.h)
+
 add_library(random_shuffle STATIC random_shuffle.cc)
 target_link_libraries(random_shuffle rand)
+
+add_library(sort STATIC sort.cc sort.h)
+
+add_library(tree_traversal STATIC tree_traversal.cc tree_traversal.h tree.h)

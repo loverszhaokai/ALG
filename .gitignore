@@ -4,5 +4,6 @@
 *.log
 *.o
 *.out
+output_test.txt
 
 build-cmake/

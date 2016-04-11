@@ -114,7 +114,7 @@ int TEST_preorderTraversal_recursively()
 {
 	TimeUtil tu;
 
-	if (0 != get_files("tree_traversal_test_data/preorder", &in_files, &out_files))
+	if (0 != get_files("test/tree_traversal_test_data/preorder", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
 		const string in_file_name = in_files[iii];
@@ -148,7 +148,7 @@ int TEST_preorderTraversal_iteratively()
 {
 	TimeUtil tu;
 
-	if (0 != get_files("tree_traversal_test_data/preorder", &in_files, &out_files))
+	if (0 != get_files("test/tree_traversal_test_data/preorder", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
 		const string in_file_name = in_files[iii];
@@ -182,7 +182,7 @@ int TEST_inorderTraversal_recursively()
 {
 	TimeUtil tu;
 
-	if (0 != get_files("tree_traversal_test_data/inorder", &in_files, &out_files))
+	if (0 != get_files("test/tree_traversal_test_data/inorder", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
 		const string in_file_name = in_files[iii];
@@ -216,7 +216,7 @@ int TEST_inorderTraversal_iteratively()
 {
 	TimeUtil tu;
 
-	if (0 != get_files("tree_traversal_test_data/inorder", &in_files, &out_files))
+	if (0 != get_files("test/tree_traversal_test_data/inorder", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
 		const string in_file_name = in_files[iii];
@@ -250,7 +250,7 @@ int TEST_postorderTraversal_recursively()
 {
 	TimeUtil tu;
 
-	if (0 != get_files("tree_traversal_test_data/postorder", &in_files, &out_files))
+	if (0 != get_files("test/tree_traversal_test_data/postorder", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
 		const string in_file_name = in_files[iii];
@@ -284,7 +284,7 @@ int TEST_postorderTraversal_iteratively()
 {
 	TimeUtil tu;
 
-	if (0 != get_files("tree_traversal_test_data/postorder", &in_files, &out_files))
+	if (0 != get_files("test/tree_traversal_test_data/postorder", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
 		const string in_file_name = in_files[iii];

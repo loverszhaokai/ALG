@@ -99,7 +99,7 @@ int TEST_combinations_kai()
 {
 	TimeUtil tu;
 
-	if (0 != get_files("combinations_test_data/", &in_files, &out_files))
+	if (0 != get_files("test/combinations_test_data/", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
 		const string in_file_name = in_files[iii];
@@ -134,7 +134,7 @@ int TEST_combinations_backtrack()
 {
 	TimeUtil tu;
 
-	if (0 != get_files("combinations_test_data/", &in_files, &out_files))
+	if (0 != get_files("test/combinations_test_data/", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
 		const string in_file_name = in_files[iii];
@@ -169,7 +169,7 @@ int TEST_combinations_01()
 {
 	TimeUtil tu;
 
-	if (0 != get_files("combinations_test_data/", &in_files, &out_files))
+	if (0 != get_files("test/combinations_test_data/", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
 		const string in_file_name = in_files[iii];
@@ -204,7 +204,7 @@ int TEST_combinations_bit_operation()
 {
 	TimeUtil tu;
 
-	if (0 != get_files("combinations_test_data/", &in_files, &out_files))
+	if (0 != get_files("test/combinations_test_data/", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
 		const string in_file_name = in_files[iii];

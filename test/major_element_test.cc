@@ -73,7 +73,7 @@ int TEST_major_element_2()
 {
 	TimeUtil tu;
 
-	if (0 != get_files("major_element_test_data/2", &in_files, &out_files))
+	if (0 != get_files("test/major_element_test_data/2", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
 		const string in_file_name = in_files[iii];
@@ -104,7 +104,7 @@ int TEST_major_element_3()
 {
 	TimeUtil tu;
 
-	if (0 != get_files("major_element_test_data/3", &in_files, &out_files))
+	if (0 != get_files("test/major_element_test_data/3", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
 		const string in_file_name = in_files[iii];
@@ -136,7 +136,7 @@ int TEST_major_element_4()
 {
 	TimeUtil tu;
 
-	if (0 != get_files("major_element_test_data/4", &in_files, &out_files))
+	if (0 != get_files("test/major_element_test_data/4", &in_files, &out_files))
 		return -1;
 	for (int iii = 0; iii < in_files.size(); iii++) {
 		const string in_file_name = in_files[iii];
