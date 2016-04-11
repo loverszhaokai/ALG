@@ -13,17 +13,7 @@
  * This file contains the randon shuffle algorithm.
  */
 
-#include <stdlib.h>
-#include <time.h>
-
-/*
- * Randomly return int between left and right, including left and right
- */
-static inline int get_rand_int(const int left, const int right)
-{
-	int step = right - left + 1;
-	return left + rand() % step;
-}
+#include "util/rand.h"
 
 /*
  * Randomly shuffle all the value in the array. Must ensure that every
@@ -33,8 +23,6 @@ static inline int get_rand_int(const int left, const int right)
 void random_shuffle(int arr[], const int size)
 {
 	int r, tmp;
-
-	srand(time(NULL));
 
 	for (int i = 1; i < size - 1; i++) {
 		tmp = arr[i - 1];

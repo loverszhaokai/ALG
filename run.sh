@@ -1,7 +1,5 @@
 #!/bin/bash
 
-autoreconf --install
-./configure
-make clean
-make -sj8
-make check
+mkdir -p build-cmake/Debug/
+cmake -H. -B./build-cmake/Debug/obj -DCMAKE_BUILD_TYPE=Debug
+cmake --build ./build-cmake/Debug/obj -- -j4
