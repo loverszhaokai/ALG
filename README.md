@@ -6,10 +6,8 @@ This contains many useful algorithms.
 ## 1. Run
 
 ```
-$ autoreconf --install
-$ ./configure
-$ make
-$ make check
+$ ./run.sh
+$ ./build-cmake/Debug/random_shuffle_test
 ```
 
 ## 2. List of algorithms
