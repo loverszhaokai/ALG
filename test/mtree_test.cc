@@ -86,8 +86,12 @@ static int test_complex()
     { MTreeSetting(5, 3, 0, 10), -1, -1 },
     { MTreeSetting(5, 5, 0, 10), -1, -1 },
     { MTreeSetting(5, 5, 0, 100), -1, -1 },
+    { MTreeSetting(6, 5, 0, 100), -1, -1 },
+    { MTreeSetting(6, 6, 0, 100), -1, -1 },
+    { MTreeSetting(7, 5, 0, 100), -1, -1 },
     { MTreeSetting(8, 5, 0, 100), -1, -1 },
-    { MTreeSetting(9, 5, 0, 100), -1, -1 },
+    { MTreeSetting(8, 5, 0, 50), -1, -1 },
+    { MTreeSetting(8, 5, 0, 10), -1, -1 },
   };
 
   TimeUtil tu;

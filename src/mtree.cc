@@ -105,18 +105,18 @@ static bool GetChildNode(const MTreeSetting* const setting,
                          MTreeNode* parent_mnode,
                          const int max_height,
                          int* id) {
-std::cout << "\t" << __FUNCTION__ << "(max_height=" << max_height
-  << ", id=" << *id << ")" << std::endl;
+//std::cout << "\t" << __FUNCTION__ << "(max_height=" << max_height
+//  << ", id=" << *id << ")" << std::endl;
   if (max_height > 1) {
     const int cnt_height = util::get_rand_int(0, max_height);
-    std::cout << "\t\t cnt_height=" << cnt_height << std::endl;
+    //std::cout << "\t\t cnt_height=" << cnt_height << std::endl;
     if (cnt_height != 0) {
       // Have child node
       MTreeNode* child_mnode = GenerateMTreeRecursively(setting, parent_mnode, max_height - 1, id);
       if (child_mnode == NULL) {
         return false;
       }
-      std::cout << "\t id=" << parent_mnode->id << "\t child->id=" << child_mnode->id << std::endl;
+      //std::cout << "\t id=" << parent_mnode->id << "\t child->id=" << child_mnode->id << std::endl;
       parent_mnode->child = child_mnode;
     }
   }
@@ -126,8 +126,8 @@ std::cout << "\t" << __FUNCTION__ << "(max_height=" << max_height
 static MTreeNode* GenerateMTreeRecursively(const MTreeSetting* const setting,
                                            MTreeNode* parent_mnode,
                                            const int max_height, int* id) {
-std::cout << "\t" << __FUNCTION__ << "(max_height=" << max_height
-  << ", id=" << *id << ")" << std::endl;
+//std::cout << "\t" << __FUNCTION__ << "(max_height=" << max_height
+//  << ", id=" << *id << ")" << std::endl;
   MTreeNode* mnode = new MTreeNode();
   if (mnode == NULL) {
     return NULL;
@@ -135,7 +135,7 @@ std::cout << "\t" << __FUNCTION__ << "(max_height=" << max_height
 
   mnode->id = (*id)++;
   mnode->value = util::get_rand_int(setting->min_value, setting->max_value);
-  std::cout << "id=" << *id << "\t max_height = " << max_height << std::endl;
+  //std::cout << "id=" << *id << "\t max_height = " << max_height << std::endl;
   mnode->parent = const_cast<MTreeNode*>(parent_mnode);
 
   if (!GetChildNode(setting, mnode, max_height, id)) {
@@ -143,7 +143,7 @@ std::cout << "\t" << __FUNCTION__ << "(max_height=" << max_height
   }
 
   const int sibling_num = util::get_rand_int(0, setting->max_child_num);
-  std::cout << "id=" << *id << "\t sibling_num=" << sibling_num << std::endl;
+  //std::cout << "id=" << *id << "\t sibling_num=" << sibling_num << std::endl;
   MTreeNode* last_mnode = mnode;
   for (int i = 0; i < sibling_num; i++) {
     MTreeNode* cnt_mnode = new MTreeNode();
@@ -152,8 +152,8 @@ std::cout << "\t" << __FUNCTION__ << "(max_height=" << max_height
     }
     cnt_mnode->id = (*id)++;
     cnt_mnode->value = util::get_rand_int(setting->min_value, setting->max_value);
-    std::cout << "id=" << cnt_mnode->id << "\t max_height = " << max_height << std::endl;
-    std::cout << "\t id=" << mnode->id << "\t sibling_node->id=" << cnt_mnode->id << std::endl;
+    //std::cout << "id=" << cnt_mnode->id << "\t max_height = " << max_height << std::endl;
+    //std::cout << "\t id=" << mnode->id << "\t sibling_node->id=" << cnt_mnode->id << std::endl;
     cnt_mnode->parent = const_cast<MTreeNode*>(parent_mnode);
 
     if (!GetChildNode(setting, cnt_mnode, max_height, id)) {
