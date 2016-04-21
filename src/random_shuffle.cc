@@ -26,7 +26,7 @@ void random_shuffle(int arr[], const int size)
 
 	for (int i = 1; i < size - 1; i++) {
 		tmp = arr[i - 1];
-		r = get_rand_int(i, size - 1); 
+		r = util::get_rand_int(i, size - 1);
 		arr[i - 1] = arr[r];
 		arr[r] = tmp;
 	}

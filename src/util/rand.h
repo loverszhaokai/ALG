@@ -17,10 +17,13 @@
 #ifndef _ALG_SRC_UTIL_RAND_H_
 #define _ALG_SRC_UTIL_RAND_H_
 
+namespace util {
+
 /*
  * Randomly return int between left and right, including left and right
  */
 int get_rand_int(const int left, const int right);
 
+}
 
 #endif

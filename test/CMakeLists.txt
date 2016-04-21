@@ -45,6 +45,9 @@ target_link_libraries(longest_increasing_subsequence_test alg_test longest_incre
 add_executable(major_element_test major_element_test.cc)
 target_link_libraries(major_element_test alg_test major_element)
 
+add_executable(mtree_test mtree_test.cc)
+target_link_libraries(mtree_test alg_test mtree rand)
+
 add_executable(random_shuffle_test random_shuffle_test.cc)
 target_link_libraries(random_shuffle_test alg_test random_shuffle)
 

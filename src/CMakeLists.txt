@@ -43,6 +43,8 @@ add_library(longest_increasing_subsequence STATIC
 
 add_library(major_element STATIC major_element.cc major_element.h)
 
+add_library(mtree STATIC mtree.cc mtree.h)
+
 add_library(random_shuffle STATIC random_shuffle.cc)
 target_link_libraries(random_shuffle rand)
 

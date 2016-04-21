@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+namespace util {
 
 static bool has_set_rand_seed = false;
 
@@ -33,4 +34,6 @@ int get_rand_int(const int left, const int right)
 
 	int step = right - left + 1;
 	return left + rand() % step;
+}
+
 }
