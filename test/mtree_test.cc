@@ -28,12 +28,14 @@ static MTreeNode* CreateSimpleMTree() {
     return NULL;
   }
   root->value = 1;
+  root->id = 1;
 
   MTreeNode* child_mnode = new MTreeNode();
   if (child_mnode == NULL) {
     return NULL;
   }
   child_mnode->value = 2;
+  child_mnode->id = 2;
   child_mnode->parent = root;
 
   MTreeNode* child_next_mnode = new MTreeNode();
@@ -41,6 +43,7 @@ static MTreeNode* CreateSimpleMTree() {
     return NULL;
   }
   child_next_mnode->value = 3;
+  child_next_mnode->id = 3;
   child_next_mnode->parent = root;
 
   root->child = child_mnode;
