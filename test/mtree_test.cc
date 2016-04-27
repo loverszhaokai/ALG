@@ -57,6 +57,8 @@ static MTreeNode* CreateSimpleMTree() {
   return root;
 }
 
+
+
 struct ElementInfo {
   int child_index;
   int child_num;
@@ -177,29 +179,17 @@ static int test_generate()
     int time_map_reduce;
     int time_divide_and_conquer;
   } test_infos [] = {
-    { MTreeSetting(5, 5, 10000, 1000), -1, -1 },
-    { MTreeSetting(5, 5, 10000, 10000), -1, -1 },
-    { MTreeSetting(5, 5, 10000, 100000), -1, -1 },
+    { MTreeSetting(5, 50, 10000, 1000), -1, -1 },
+    { MTreeSetting(5, 50, 10000, 10000), -1, -1 },
+    { MTreeSetting(5, 50, 10000, 100000), -1, -1 },
 
-    { MTreeSetting(5, 5, 100000, 10000), -1, -1 },
-    { MTreeSetting(5, 5, 100000, 100000), -1, -1 },
-    { MTreeSetting(5, 5, 100000, 1000000), -1, -1 },
+    { MTreeSetting(5, 50, 100000, 10000), -1, -1 },
+    { MTreeSetting(5, 50, 100000, 100000), -1, -1 },
+    { MTreeSetting(5, 50, 100000, 1000000), -1, -1 },
 
-    { MTreeSetting(5, 5, 1000000, 100000), -1, -1 },
-    { MTreeSetting(5, 5, 1000000, 1000000), -1, -1 },
-    { MTreeSetting(5, 5, 1000000, 10000000), -1, -1 },
-
-    { MTreeSetting(10, 10, 10000, 1000), -1, -1 },
-    { MTreeSetting(10, 10, 10000, 10000), -1, -1 },
-    { MTreeSetting(10, 10, 10000, 100000), -1, -1 },
-
-    { MTreeSetting(10, 10, 100000, 10000), -1, -1 },
-    { MTreeSetting(10, 10, 100000, 100000), -1, -1 },
-    { MTreeSetting(10, 10, 100000, 1000000), -1, -1 },
-
-    { MTreeSetting(10, 10, 1000000, 100000), -1, -1 },
-    { MTreeSetting(10, 10, 1000000, 1000000), -1, -1 },
-    { MTreeSetting(10, 10, 1000000, 10000000), -1, -1 },
+    { MTreeSetting(5, 50, 1000000, 100000), -1, -1 },
+    { MTreeSetting(5, 50, 1000000, 1000000), -1, -1 },
+    { MTreeSetting(5, 50, 1000000, 10000000), -1, -1 },
   };
 
   TimeUtil tu;
@@ -217,25 +207,21 @@ static int test_generate()
       return -1;
     }
 
+    /*
     char file_path_buf[100];
     snprintf(file_path_buf, sizeof(file_path_buf), "complex_%d.output", i + 1);
 
     if (!DumpMTreeToFile(root_mnode, file_path_buf)) {
       return -1;
     }
+    */
 
-    MTreeNode* root_parse = CreateMTreeNode(file_path_buf);
-    if (!CompareMTree(root_mnode, root_parse)) {
-      std::cerr << "case: # " << i + 1 << " failed to CompareMTree()" << std::endl;
-      return -1;
-    }
-    FreeMTree(root_parse);
-
-
+    /*
     snprintf(file_path_buf, sizeof(file_path_buf), "complex_%d_h.output", i + 1);
     if (!DumpMTreeToFile(root_mnode, file_path_buf, "")) {
       return -1;
     }
+    */
 
     MTreeNode* root_mnode_cp = DeepCopyMTree(root_mnode);
     if (root_mnode_cp == NULL) {
@@ -310,15 +296,30 @@ int main()
 {
 	TimeUtil tu;
 
+  std::cout << "\t ==test_simple()==" << std::endl;
 	if (test_simple() != 0) {
     std::cerr << "failed to test_simple()" << std::endl;
 		return -1;
+  } else {
+    std::cout << "\t test_simple() [PASS]" << std::endl;
   }
 
-  if (test_parse() != 0) {
-    std::cerr << "failed to test_complex()" << std::endl;
+  std::cout << "\n\t ==test_generate()==" << std::endl;
+  if (test_generate() != 0) {
+    std::cerr << "failed to test_generate()" << std::endl;
     return -1;
+  } else {
+    std::cout << "\t test_generate() [PASS]" << std::endl;
   }
+
+  std::cout << "\n\t ==test_parse()==" << std::endl;
+  if (test_parse() != 0) {
+    std::cerr << "failed to test_parse()" << std::endl;
+    return -1;
+  } else {
+    std::cout << "\t test_parse() [PASS]" << std::endl;
+  }
+  std::cout << "\n\t mtree_test [ALL PASS]\n" << std::endl;
 
 	std::cout << std::endl;
 	std::cout << __FILE__ << "  total run time = " << tu.get_run_time()
