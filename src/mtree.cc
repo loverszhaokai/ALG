@@ -19,6 +19,7 @@
 #include <fstream>
 #include <map>
 #include <unordered_set>
+#include <unordered_map>
 
 #include "util/rand.h"
 
@@ -258,42 +259,33 @@ MTreeNode* GenerateMTree(const MTreeSetting* const setting) {
   return root;
 }
 
-static void GatherParentMTreeNodes(
-  MTreeNode* mnode,
-  std::map<int, std::unordered_set<MTreeNode*> >* value_nodes) {
-
-  const int val = mnode->value;
-  while (mnode) {
-    if ((*value_nodes)[val].find(mnode) != (*value_nodes)[val].end()) {
-      return;
-    }
-    (*value_nodes)[val].insert(mnode);
-    mnode = mnode->parent;
-  }
-}
-
 static void CountSubtreeDiffValueCountMapReduceRecursively(
-  MTreeNode* mnode,
-  std::map<int, std::unordered_set<MTreeNode*> >* value_nodes) {
-
+    MTreeNode* mnode,
+  std::unordered_map<int, std::unordered_set<int> >* value_nodes) {
   while (mnode) {
-    GatherParentMTreeNodes(mnode, value_nodes);
+    const int val = mnode->value;
+    std::unordered_set<int>& set = (*value_nodes)[val];
+    set.insert(mnode->id);
+    mnode->subtree_diff_value_count++;
+
+    MTreeNode* parent = mnode->parent;
+    while (parent) {
+      if (set.find(parent->id) != set.end()) {
+        break;
+      } else {
+        set.insert(parent->id);
+        parent->subtree_diff_value_count++;
+      }
+      parent = parent->parent;
+    }
     CountSubtreeDiffValueCountMapReduceRecursively(mnode->child, value_nodes);
     mnode = mnode->next;
   }
 }
 
 void CountSubtreeDiffValueCountMapReduce(MTreeNode* root) {
-
-  std::map<int, std::unordered_set<MTreeNode*> > value_nodes;
-
+  std::unordered_map<int, std::unordered_set<int> > value_nodes;
   CountSubtreeDiffValueCountMapReduceRecursively(root, &value_nodes);
-
-  for (auto it = value_nodes.begin(); it != value_nodes.end(); it++) {
-    for (auto item : it->second) {
-      item->subtree_diff_value_count++;
-    }
-  }
 }
 
 static void CountSubtreeDiffValueCountDivideAndConquerRecursively(
