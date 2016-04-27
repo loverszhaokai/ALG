@@ -4,6 +4,7 @@
 *.log
 *.o
 *.out
+mtree_test
 output_test.txt
 
 build-cmake/

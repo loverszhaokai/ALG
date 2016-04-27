@@ -13,9 +13,14 @@
  * This file contains the test of mtree
  */
 
+#include <fstream>
 #include <iostream>
+#include <sstream>
+#include <stack>
+#include <vector>
 
 #include "mtree.h"
+#include "test.h"
 #include "time_util.h"
 
 //
@@ -49,6 +54,93 @@ static MTreeNode* CreateSimpleMTree() {
   return root;
 }
 
+struct ElementInfo {
+  int child_index;
+  int child_num;
+  MTreeNode* parent_mnode;
+  MTreeNode* prev_sibling_mnode;
+};
+
+static MTreeNode* CreateOneMTreeNode(const std::string& line, ElementInfo* einfo) {
+  MTreeNode* mnode = new MTreeNode();
+  if (mnode == NULL) {
+    return NULL;
+  }
+
+  std::stringstream ss(line);
+  int id, value, subtree_diff_value_count, child_num;
+  ss >> id >> value >> subtree_diff_value_count >> child_num;
+
+  mnode->id = id;
+  mnode->value = value;
+  mnode->subtree_diff_value_count = subtree_diff_value_count;
+  mnode->parent = NULL;
+  mnode->child = NULL;
+  mnode->next = NULL;
+
+  einfo->child_num = child_num;
+
+  return mnode;
+}
+
+
+static MTreeNode* CreateMTreeNode(const std::string& file_name) {
+	std::fstream ifs(file_name.c_str(), std::fstream::in);
+	if (!ifs) {
+		std::cerr << "failed to open(" << file_name << ")\n";
+		return NULL;
+	}
+
+  std::string line;
+  MTreeNode root_parent_mnode;
+  root_parent_mnode.child = NULL;
+  
+  std::stack<ElementInfo> elements;
+  ElementInfo element_info;
+  element_info.child_index = 1; 
+  element_info.child_num = 1; 
+  element_info.parent_mnode = &root_parent_mnode;
+  element_info.prev_sibling_mnode = NULL;
+  elements.push(element_info); // root node
+
+  ElementInfo* cnt_element = &elements.top();
+
+  while (!elements.empty()) {
+    cnt_element = &elements.top();
+    if (cnt_element->child_index > cnt_element->child_num) {
+      elements.pop();
+      continue;
+    }
+
+    if (!std::getline(ifs, line)) {
+      return NULL;
+    }
+
+    MTreeNode* mnode = CreateOneMTreeNode(line, &element_info);
+    if (mnode == NULL) {
+      return NULL;
+    }
+
+    mnode->parent = cnt_element->parent_mnode;
+
+    if (cnt_element->prev_sibling_mnode != NULL) {
+      cnt_element->prev_sibling_mnode->next = mnode;
+    } else {
+      cnt_element->parent_mnode->child = mnode;
+    }
+    cnt_element->prev_sibling_mnode = mnode;
+    cnt_element->child_index++;
+
+    if (element_info.child_num > 0) {
+      element_info.child_index = 1;
+      element_info.parent_mnode = mnode;
+      elements.push(element_info);
+    }
+  }
+
+  return root_parent_mnode.child;
+}
+
 static int test_simple()
 {
   MTreeNode* simple_root = CreateSimpleMTree();
@@ -75,23 +167,36 @@ static int test_simple()
 	return 0;
 }
 
-static int test_complex()
+static int test_generate()
 {
   static struct TestInfo {
     MTreeSetting setting;
     int time_map_reduce;
     int time_divide_and_conquer;
   } test_infos [] = {
-    { MTreeSetting(3, 3, 0, 10), -1, -1 },
-    { MTreeSetting(5, 3, 0, 10), -1, -1 },
-    { MTreeSetting(5, 5, 0, 10), -1, -1 },
-    { MTreeSetting(5, 5, 0, 100), -1, -1 },
-    { MTreeSetting(6, 5, 0, 100), -1, -1 },
-    { MTreeSetting(6, 6, 0, 100), -1, -1 },
-    { MTreeSetting(7, 5, 0, 100), -1, -1 },
-    { MTreeSetting(8, 5, 0, 100), -1, -1 },
-    { MTreeSetting(8, 5, 0, 50), -1, -1 },
-    { MTreeSetting(8, 5, 0, 10), -1, -1 },
+    { MTreeSetting(5, 5, 10000, 1000), -1, -1 },
+    { MTreeSetting(5, 5, 10000, 10000), -1, -1 },
+    { MTreeSetting(5, 5, 10000, 100000), -1, -1 },
+
+    { MTreeSetting(5, 5, 100000, 10000), -1, -1 },
+    { MTreeSetting(5, 5, 100000, 100000), -1, -1 },
+    { MTreeSetting(5, 5, 100000, 1000000), -1, -1 },
+
+    { MTreeSetting(5, 5, 1000000, 100000), -1, -1 },
+    { MTreeSetting(5, 5, 1000000, 1000000), -1, -1 },
+    { MTreeSetting(5, 5, 1000000, 10000000), -1, -1 },
+
+    { MTreeSetting(10, 10, 10000, 1000), -1, -1 },
+    { MTreeSetting(10, 10, 10000, 10000), -1, -1 },
+    { MTreeSetting(10, 10, 10000, 100000), -1, -1 },
+
+    { MTreeSetting(10, 10, 100000, 10000), -1, -1 },
+    { MTreeSetting(10, 10, 100000, 100000), -1, -1 },
+    { MTreeSetting(10, 10, 100000, 1000000), -1, -1 },
+
+    { MTreeSetting(10, 10, 1000000, 100000), -1, -1 },
+    { MTreeSetting(10, 10, 1000000, 1000000), -1, -1 },
+    { MTreeSetting(10, 10, 1000000, 10000000), -1, -1 },
   };
 
   TimeUtil tu;
@@ -101,13 +206,34 @@ static int test_complex()
     std::cout << "\t case: #" << i + 1 << std::endl;
     std::cout << "\t\t max_height = " << test_infos[i].setting.max_height
       << "\t max_child_num = " << test_infos[i].setting.max_child_num
-      << "\t min_value = " << test_infos[i].setting.min_value
-      << "\t max_value = " << test_infos[i].setting.max_value << std::endl;
+      << "\t node_num = " << test_infos[i].setting.node_num
+      << "\t value_num = " << test_infos[i].setting.value_num << std::endl;
 
     MTreeNode* root_mnode = GenerateMTree(&test_infos[i].setting);
     if (root_mnode == NULL) {
       return -1;
     }
+
+    char file_path_buf[100];
+    snprintf(file_path_buf, sizeof(file_path_buf), "complex_%d.output", i + 1);
+
+    if (!DumpMTreeToFile(root_mnode, file_path_buf)) {
+      return -1;
+    }
+
+    MTreeNode* root_parse = CreateMTreeNode(file_path_buf);
+    if (!CompareMTree(root_mnode, root_parse)) {
+      std::cerr << "case: # " << i + 1 << " failed to CompareMTree()" << std::endl;
+      return -1;
+    }
+    FreeMTree(root_parse);
+
+
+    snprintf(file_path_buf, sizeof(file_path_buf), "complex_%d_h.output", i + 1);
+    if (!DumpMTreeToFile(root_mnode, file_path_buf, "")) {
+      return -1;
+    }
+
     MTreeNode* root_mnode_cp = DeepCopyMTree(root_mnode);
     if (root_mnode_cp == NULL) {
       return -1;
@@ -135,6 +261,48 @@ static int test_complex()
 	return 0;
 }
 
+static int test_parse()
+{
+  TimeUtil tu;
+  std::vector<std::string> in_files, out_files;
+	if (0 != get_files("test/mtree_test_data/", &in_files, &out_files)) {
+    return -1;
+  }
+
+  for (int i = 0; i < in_files.size(); i++) {
+    std::cout << "\t case: #" << i + 1 << std::endl;
+    MTreeNode* root_mnode = CreateMTreeNode(in_files[i]);
+    if (root_mnode == NULL) {
+      return -1;
+    }
+
+    MTreeNode* root_mnode_cp = DeepCopyMTree(root_mnode);
+    if (root_mnode_cp == NULL) {
+      return -1;
+    }
+
+    tu.restart();
+    CountSubtreeDiffValueCountMapReduce(root_mnode);
+    int run_time = tu.get_run_time();
+    std::cout << "\t\t time_map_reduce         = " << run_time << " ms" << std::endl;
+
+    tu.restart();
+    CountSubtreeDiffValueCountDivideAndConquer(root_mnode_cp);
+    run_time = tu.get_run_time();
+    std::cout << "\t\t time_divide_and_conquer = " << run_time << " ms" << std::endl;
+    std::cout << std::endl;
+
+    if (!CompareMTree(root_mnode, root_mnode_cp)) {
+      std::cerr << "case: # " << i + 1 << " failed to CompareMTree()" << std::endl;
+      return -1;
+    }
+
+    FreeMTree(root_mnode);
+    FreeMTree(root_mnode_cp);
+  }
+	return 0;
+}
+
 int main()
 {
 	TimeUtil tu;
@@ -144,7 +312,7 @@ int main()
 		return -1;
   }
 
-  if (test_complex() != 0) {
+  if (test_parse() != 0) {
     std::cerr << "failed to test_complex()" << std::endl;
     return -1;
   }

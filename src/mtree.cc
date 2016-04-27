@@ -147,18 +147,24 @@ static MTreeNode* GenerateMTreeRecursively(const MTreeSetting* const setting,
                                            std::fstream& fs) {
 //std::cout << "\t" << __FUNCTION__ << "(max_height=" << max_height
 //  << ", id=" << *id << ")" << std::endl;
+  if (*id > setting->node_num) {
+    return NULL;
+  }
   MTreeNode* mnode = new MTreeNode();
   if (mnode == NULL) {
     return NULL;
   }
 
   mnode->id = (*id)++;
-  mnode->value = util::get_rand_int(setting->min_value, setting->max_value);
-  //fs << "id=" << mnode->id << std::endl;
+  mnode->value = mnode->id % setting->value_num;
+  //fs << "id=" << mnode->id << " mnode=" << mnode << std::endl;
   //std::cout << "id=" << mnode->id << "\t max_height = " << max_height << std::endl;
   mnode->parent = const_cast<MTreeNode*>(parent_mnode);
 
   if (!GetChildNode(setting, mnode, max_height, id, fs)) {
+    if (*id > setting->node_num) {
+      return mnode;
+    }
     return NULL;
   }
 
@@ -166,23 +172,31 @@ static MTreeNode* GenerateMTreeRecursively(const MTreeSetting* const setting,
   //std::cout << "id=" << mnode->id << "\t sibling_num=" << sibling_num << std::endl;
   MTreeNode* last_mnode = mnode;
   for (int i = 0; i < sibling_num; i++) {
+
+    if (*id > setting->node_num) {
+      return mnode;
+    }
+
     MTreeNode* cnt_mnode = new MTreeNode();
     if (cnt_mnode == NULL) {
       return NULL;
     }
     cnt_mnode->id = (*id)++;
-    cnt_mnode->value = util::get_rand_int(setting->min_value, setting->max_value);
-    //fs << "id=" << cnt_mnode->id << std::endl;
+    cnt_mnode->value = cnt_mnode->id % setting->value_num;
+    //fs << "\t id=" << cnt_mnode->id << " cnt_mnode=" << cnt_mnode << std::endl;
     //std::cout << "id=" << cnt_mnode->id << "\t max_height = " << max_height << std::endl;
     //std::cout << "\t id=" << mnode->id << "\t sibling_node->id=" << cnt_mnode->id << std::endl;
     cnt_mnode->parent = const_cast<MTreeNode*>(parent_mnode);
 
-    if (!GetChildNode(setting, cnt_mnode, max_height, id, fs)) {
-      return NULL;
-    }
-
     last_mnode->next = cnt_mnode;
     last_mnode = cnt_mnode;
+
+    if (!GetChildNode(setting, cnt_mnode, max_height, id, fs)) {
+      if (*id > setting->node_num) {
+        return mnode;
+      }
+      return NULL;
+    }
   }
 
   return mnode;
@@ -193,8 +207,9 @@ MTreeNode* GenerateMTree(const MTreeSetting* const setting) {
   if (root == NULL) {
     return NULL;
   }
-  root->id = 0;
-  root->value = util::get_rand_int(setting->min_value, setting->max_value);
+  int id = 1;
+  root->id = id++;
+  root->value = root->id % setting->value_num;
 
   const std::string file_path = "generate_mtree.log";
   std::fstream fs(file_path.c_str(), std::fstream::out);
@@ -203,13 +218,39 @@ MTreeNode* GenerateMTree(const MTreeSetting* const setting) {
     return NULL;
   }
 
-  int id = 1;
-  MTreeNode* child = GenerateMTreeRecursively(setting, root, setting->max_height, &id, fs);
-  if (child == NULL) {
-    fs.close();
-    return NULL;
+  const MTreeNode* first_root_child = NULL;
+  MTreeNode* last_root_child = NULL;
+  while (id < setting->node_num) {
+    //fs << "\t id=" << id << "\n";
+
+    MTreeNode* new_root_child = new MTreeNode();
+    if (new_root_child == NULL) {
+      return NULL;
+    }
+
+    if (first_root_child == NULL) {
+      first_root_child = new_root_child;
+    }
+
+    new_root_child->id = id++;
+    new_root_child->value = new_root_child->id % setting->value_num;
+    new_root_child->parent = root;
+    
+    MTreeNode* child = GenerateMTreeRecursively(setting, new_root_child, setting->max_height, &id, fs);
+    //fs << "\t id=" << id << " child=" << child << "\n";
+    if (child == NULL && id < setting->node_num) {
+      //fs << "\t child == NULL && id < setting->node_num\n";
+      fs.close();
+      return NULL;
+    }
+    new_root_child->child = child;
+
+    if (last_root_child != NULL) {
+      last_root_child->next = new_root_child;
+    }
+    last_root_child = new_root_child;
   }
-  root->child = child;
+  root->child = const_cast<MTreeNode*>(first_root_child);
 
   fs << "\t Finish to generate mtree\n";
 
@@ -314,6 +355,19 @@ static void DumpMTreeToFileRecusively(const MTreeNode* mnode, std::fstream& fs) 
   }
 }
 
+bool DumpMTreeToFile(const MTreeNode* root, const std::string& file_path) {
+  std::fstream fs(file_path.c_str(), std::fstream::out);
+  if (!fs.is_open()) {
+    std::cerr << "failed to open:" << file_path << "||" << std::endl;
+    return false;
+  }
+
+  DumpMTreeToFileRecusively(root, fs);
+
+  fs.close();
+  return true;
+}
+
 static void DumpMTreeToFileRecusively(const MTreeNode* mnode, std::fstream& fs,
                                       const std::string& prefix_space) {
   if (mnode == NULL) {
@@ -340,19 +394,6 @@ static void DumpMTreeToFileRecusively(const MTreeNode* mnode, std::fstream& fs,
     DumpMTreeToFileRecusively(next_mnode, fs, prefix_space);
     next_mnode = next_mnode->next;
   }
-}
-
-bool DumpMTreeToFile(const MTreeNode* root, const std::string& file_path) {
-  std::fstream fs(file_path.c_str(), std::fstream::out);
-  if (!fs.is_open()) {
-    std::cerr << "failed to open:" << file_path << "||" << std::endl;
-    return false;
-  }
-
-  DumpMTreeToFileRecusively(root, fs);
-
-  fs.close();
-  return true;
 }
 
 bool DumpMTreeToFile(const MTreeNode* root, const std::string& file_path,
