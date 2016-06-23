@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.3)
 project(alg_test)
 
-include_directories(../src/)
+include_directories(../src/ ../)
 
 add_definitions(-D__STDC_CONSTANT_MACROS
         -D__STDC_FORMAT_MACROS)
@@ -32,6 +32,9 @@ target_link_libraries(add_long_test alg_test add_long list_node)
 
 add_executable(combinations_test combinations_test.cc)
 target_link_libraries(combinations_test alg_test combinations)
+
+add_executable(digit_count_test digit_count_test.cc)
+target_link_libraries(digit_count_test alg_test digit_count)
 
 add_executable(dijkstra_test dijkstra_test.cc matrix.cc matrix.h)
 target_link_libraries(dijkstra_test alg_test dijkstra)

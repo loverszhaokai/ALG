@@ -31,6 +31,8 @@ add_library(add_long STATIC add_long.cc add_long.h)
 
 add_library(combinations STATIC combinations.cc combinations.h)
 
+add_library(digit_count STATIC digit_count.cc digit_count.h)
+
 add_library(dijkstra STATIC dijkstra.cc dijkstra.h)
 
 add_library(floyd STATIC floyd.cc floyd.h)

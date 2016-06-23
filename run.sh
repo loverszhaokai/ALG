@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 rm -f ./mtree_test
 mkdir -p build-cmake/Debug/
 cmake -H. -B./build-cmake/Debug/obj -DCMAKE_BUILD_TYPE=Debug
