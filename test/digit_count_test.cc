@@ -103,7 +103,7 @@ static int test() {
     tu.restart();
 
     for (size_t j = 0; j < numbers.size(); j++) {
-      const size_t count = DigitCount32Integer(numbers[j]);
+      const size_t count = popcount_1(numbers[j]);
       if (count != expected_counts[j]) {
         std::cout << "\t number         =" << numbers[j] << std::endl;
         std::cout << "\t expected_counts=" << expected_counts[j] << std::endl;
@@ -112,7 +112,7 @@ static int test() {
     }
 
     const int run_time = tu.get_run_time();
-    std::cout << "\t\t digit_count_32_integer= " << run_time << " ms" << std::endl;
+    std::cout << "\t\t popcount_1            = " << run_time << " ms" << std::endl;
     }
   }
 	return 0;

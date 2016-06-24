@@ -20,22 +20,18 @@
 #include <cstdlib>
 
 size_t DigitCount(int num);
-size_t DigitCount32Integer(int num);
-size_t DigitCount64Integer(int num);
 
 template <typename T>
 size_t DigitCountSimply(T num) {
   size_t digit_count = 0;
-
-  T bit = 1;
-  while (bit != 0) {
-    if (num & bit) {
-      digit_count ++;
-    }
-    bit <<= 1;
+  while (num) {
+    digit_count ++;
+    num = (num & (num - 1));
   }
 
   return digit_count;
 }
+
+int popcount_1(int x);
 
 #endif
