@@ -36,6 +36,9 @@ target_link_libraries(combinations_test alg_test combinations)
 add_executable(digit_count_test digit_count_test.cc)
 target_link_libraries(digit_count_test alg_test digit_count)
 
+add_executable(digit_count_generate_test_case ./digit_count_test_data/generate_test_data.cc)
+target_link_libraries(digit_count_generate_test_case alg_test digit_count rand)
+
 add_executable(dijkstra_test dijkstra_test.cc matrix.cc matrix.h)
 target_link_libraries(dijkstra_test alg_test dijkstra)
 

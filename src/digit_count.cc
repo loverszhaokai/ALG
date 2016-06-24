@@ -62,6 +62,10 @@ size_t DigitCount32Integer(int num) {
 
 size_t DigitCount64Integer(int num) {
   unsigned int unum = num;
-  size_t digit_count = 0;
-  return digit_count;
+  for (int i = 0; i < OffsetArray64Len; i++) {
+    unsigned int a = (unum >> (int)pow(2, i)) & OffsetArray64[i];
+    unsigned int b = unum & OffsetArray64[i];
+    unum = a + b;
+  }
+  return unum;
 }

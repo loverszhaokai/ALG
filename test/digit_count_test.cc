@@ -66,6 +66,8 @@ static int test() {
       return -1;
     }
 
+    std::cout << "\t\t numbers             = " << numbers.size() << std::endl;
+    {
     tu.restart();
 
     for (size_t j = 0; j < numbers.size(); j++) {
@@ -78,7 +80,40 @@ static int test() {
     }
 
     const int run_time = tu.get_run_time();
-    std::cout << "\t\t time_map_reduce         = " << run_time << " ms" << std::endl;
+    std::cout << "\t\t digit_count_simply    = " << run_time << " ms" << std::endl;
+    }
+
+    {
+    tu.restart();
+
+    for (size_t j = 0; j < numbers.size(); j++) {
+      const size_t count = DigitCount(numbers[j]);
+      if (count != expected_counts[j]) {
+        std::cout << "\t number         =" << numbers[j] << std::endl;
+        std::cout << "\t expected_counts=" << expected_counts[j] << std::endl;
+        std::cout << "\t real count     =" << count << std::endl << std::endl;
+      }
+    }
+
+    const int run_time = tu.get_run_time();
+    std::cout << "\t\t digit_count           = " << run_time << " ms" << std::endl;
+    }
+
+    {
+    tu.restart();
+
+    for (size_t j = 0; j < numbers.size(); j++) {
+      const size_t count = DigitCount32Integer(numbers[j]);
+      if (count != expected_counts[j]) {
+        std::cout << "\t number         =" << numbers[j] << std::endl;
+        std::cout << "\t expected_counts=" << expected_counts[j] << std::endl;
+        std::cout << "\t real count     =" << count << std::endl << std::endl;
+      }
+    }
+
+    const int run_time = tu.get_run_time();
+    std::cout << "\t\t digit_count_32_integer= " << run_time << " ms" << std::endl;
+    }
   }
 	return 0;
 }
@@ -93,7 +128,7 @@ int main() {
   } else {
     std::cout << "\t test() [PASS]" << std::endl;
   }
-  std::cout << "\n\t mtree_test [ALL PASS]\n" << std::endl;
+  std::cout << "\n\t digit_count_test [ALL PASS]\n" << std::endl;
 
 	std::cout << std::endl;
 	std::cout << __FILE__ << "  total run time = " << tu.get_run_time()
