@@ -24,8 +24,7 @@ using std::stack;
 
 
 // Sort from small to big including left and right
-static void _quick_sort(int a[], const int orig_left, const int orig_right)
-{
+static void _quick_sort(int a[], const int orig_left, const int orig_right) {
 	if (orig_left >= orig_right)
 		return;
 
@@ -48,20 +47,17 @@ static void _quick_sort(int a[], const int orig_left, const int orig_right)
 	_quick_sort(a, left + 1, orig_right);
 }
 
-void quick_sort(int a[], const int size)
-{
+void quick_sort(int a[], const int size) {
 	_quick_sort(a, 0, size - 1);
 }
 
-inline int swap(int *a, int *b)
-{
+static inline int swap(int *a, int *b) {
 	int tmp = *a;
 	*a = *b;
 	*b = tmp;
 }
 
-int partition(int a[], const int orig_left, int orig_right)
-{
+int partition(int a[], const int orig_left, int orig_right) {
 	int pivot = a[orig_right];
 	int left = orig_left - 1;
 
@@ -77,8 +73,7 @@ int partition(int a[], const int orig_left, int orig_right)
 	return left;
 }
 
-void _quick_sort2(int a[], const int left, const int right)
-{
+void _quick_sort2(int a[], const int left, const int right) {
 	if (left < right) {
 		int p = partition(a, left, right);
 		_quick_sort2(a, left, p - 1);
@@ -89,13 +84,11 @@ void _quick_sort2(int a[], const int left, const int right)
 //
 // Refer: https://en.wikipedia.org/wiki/Quicksort
 //
-void quick_sort2(int a[], const int size)
-{
+void quick_sort2(int a[], const int size) {
 	_quick_sort2(a, 0, size - 1);
 }
 
-void quick_sort_iteratively(int a[], const int size)
-{
+void quick_sort_iteratively(int a[], const int size) {
 	int left, right, guard, orig_left, orig_right;
 	stack<int> ids;
 
@@ -141,8 +134,7 @@ void quick_sort_iteratively(int a[], const int size)
 //
 // Faster than quick_sort_iteratively();
 //
-void quick_sort_iteratively2(int a[], const int size)
-{
+void quick_sort_iteratively2(int a[], const int size) {
 	int left, right, guard, orig_left, orig_right, top;
 	int ids[size];
 
@@ -180,8 +172,7 @@ void quick_sort_iteratively2(int a[], const int size)
 	}
 }
 
-void insert_sort(int a[], const int size)
-{
+void insert_sort(int a[], const int size) {
 	int guard;
 	int jjj;
 
@@ -196,8 +187,7 @@ void insert_sort(int a[], const int size)
 	}
 }
 
-void select_sort(int a[], const int size)
-{
+void select_sort(int a[], const int size) {
 	int max, max_index, tmp;
 
 	for (int iii = size - 1; iii >= 1; iii--) {
@@ -217,8 +207,7 @@ void select_sort(int a[], const int size)
 	}
 }
 
-void bubble_sort(int a[], const int size)
-{
+void bubble_sort(int a[], const int size) {
 	int tmp;
 	bool is_sorted;
 
@@ -238,8 +227,8 @@ void bubble_sort(int a[], const int size)
 	}
 }
 
-void merge(int a[], int b[], const int left, const int middle, const int right)
-{
+void merge(int a[], int b[], const int left, const int middle,
+           const int right) {
 	int li, ri, i;
 
 	li = left;
@@ -259,14 +248,12 @@ void merge(int a[], int b[], const int left, const int middle, const int right)
 		b[i++] = a[ri++];
 }
 
-void copy(int dst[], int dleft, int src[], int sleft, int sright)
-{
+void copy(int dst[], int dleft, int src[], int sleft, int sright) {
 	memcpy(dst + dleft, src + sleft, sizeof(int) * (sright - sleft + 1));
 }
 
 // Refer: https://en.wikipedia.org/wiki/Merge_sort
-void merge_sort_iteratively(int a[], const int size)
-{
+void merge_sort_iteratively(int a[], const int size) {
 	int n, iii;
 	int *b = (int *)malloc(size * sizeof(int));
 
@@ -288,8 +275,7 @@ void merge_sort_iteratively(int a[], const int size)
 	free(b);
 }
 
-void _merge_sort(int a[], int b[], const int left, const int right)
-{
+void _merge_sort(int a[], int b[], const int left, const int right) {
 	int middle;
 
 	if (left >= right)
@@ -304,11 +290,79 @@ void _merge_sort(int a[], int b[], const int left, const int right)
 	copy(a, left, b, 0, right - left);
 }
 
-void merge_sort(int a[], const int size)
-{
+void merge_sort(int a[], const int size) {
 	int *b = (int *)malloc(size * sizeof(int));
 
 	_merge_sort(a, b, 0, size - 1);
 
 	free(b);
+}
+
+// Merge the two list in [left, mid], and (mid, right]. Then, write the result
+// to [left, right]
+static void MergeKai(int a[], int assist[], const int left, const int mid,
+                     const int right) {
+  int l = left;
+  int r = mid + 1;
+  int assist_index = 0;
+
+  // Copy [left, mid] to assit[0, mid - left]
+  memcpy(assist, a + left, (mid - left + 1) * sizeof(int));
+
+  while (assist_index <= mid - left && r <= right) {
+    if (assist[assist_index] <= a[r]) {
+      a[l++] = assist[assist_index++];
+      continue;
+    } else if (assist[assist_index] > a[r]) {
+      a[l++] = a[r++];
+    }
+  }
+
+  while (assist_index <= mid - left) {
+    a[l++] = assist[assist_index++];
+  }
+
+  while (r <= right) {
+    a[l++] = a[r++];
+  }
+}
+
+void MergeSortIterativelyKai(int a[], const int size) {
+	int n, iii;
+	int *b = (int *)malloc(size * sizeof(int));
+
+	n = 2;
+	while (n < size) {
+		for (iii = 0; iii + n - 1 < size; iii += n) {
+			MergeKai(a, b, iii, iii + (n - 1 ) / 2, iii + n - 1);
+		}
+		if (iii < size) {
+			MergeKai(a, b, iii, iii + (n / 2 - 1), size - 1);
+		}
+		n *= 2;
+	}
+	MergeKai(a, b, 0, n / 2 - 1, size - 1);
+
+	free(b);
+}
+
+static void MergeSortKaiImpl(int a[], int assist[], const int left,
+                             const int right) {
+  if (left >= right) {
+    return;
+  }
+  const int mid = (left + right) / 2;
+
+  MergeSortKaiImpl(a, assist, left, mid);
+  MergeSortKaiImpl(a, assist, mid + 1, right);
+
+  MergeKai(a, assist, left, mid, right);
+}
+
+void MergeSortKai(int a[], const int size) {
+	int* assist= (int *)malloc(size * sizeof(int));
+
+  MergeSortKaiImpl(a, assist, 0, size - 1);
+
+	free(assist);
 }

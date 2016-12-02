@@ -234,22 +234,24 @@ int main()
 // Because they are slow, if you want test the sort algorithms, you
 // can uncomment the follwing test vectors
 
-//		{ 10000000, 20 },        // 10  million  * 20           = 200 million
+		{ 10000000, 20 },        // 10  million  * 20           = 200 million
 
-//		{ 100000, 200 },         // 100 thousand * 200          = 20  million
-//		{ 100000, 2000 },        // 100 thousand * 2000         = 200 million
+		{ 100000, 200 },         // 100 thousand * 200          = 20  million
+		{ 100000, 2000 },        // 100 thousand * 2000         = 200 million
 	};
 
 	const struct TestFunction test_funs [] = {
-		{ "insert_sort", insert_sort },
-		{ "stl_sort", stl_sort },
-		{ "quick_sort", quick_sort },
-		{ "quick_sort2", quick_sort2 },
-		{ "quick_sort_iteratively", quick_sort_iteratively },
-		{ "quick_sort_iteratively2", quick_sort_iteratively2 },
+//    { "insert_sort", insert_sort },
+//    { "stl_sort", stl_sort },
+//    { "quick_sort", quick_sort },
+//    { "quick_sort2", quick_sort2 },
+//    { "quick_sort_iteratively", quick_sort_iteratively },
+//    { "quick_sort_iteratively2", quick_sort_iteratively2 },
 		{ "merge_sort_iteratively", merge_sort_iteratively },
 		{ "merge_sort", merge_sort },
-		{ "bubble_sort", bubble_sort },
+		{ "MergeSortIterativelyKai", MergeSortIterativelyKai },
+		{ "MergeSortKai", MergeSortKai },
+//    { "bubble_sort", bubble_sort },
 	};
 
 	for (int iii = 0;
@@ -267,12 +269,10 @@ int main()
 		cout << "------------------------------------------------------------------------------------------"
 			<< endl;
 
-		for (int jjj = 0;
-			jjj < sizeof(test_funs) / sizeof(struct TestFunction);
-			jjj++) {
-			if (test_sort(test_funs[jjj].name,
-				test_funs[jjj].sort_f) != 0)
-				return -1;
+    for (int jjj = 0; jjj < sizeof(test_funs) / sizeof(struct TestFunction);
+         jjj++) {
+      if (test_sort(test_funs[jjj].name, test_funs[jjj].sort_f) != 0)
+        return -1;
 		}
 
 		done();
