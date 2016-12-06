@@ -321,10 +321,6 @@ static void MergeKai(int a[], int assist[], const int left, const int mid,
   while (assist_index <= mid - left) {
     a[l++] = assist[assist_index++];
   }
-
-  while (r <= right) {
-    a[l++] = a[r++];
-  }
 }
 
 void MergeSortIterativelyKai(int a[], const int size) {
@@ -351,7 +347,7 @@ static void MergeSortKaiImpl(int a[], int assist[], const int left,
   if (left >= right) {
     return;
   }
-  const int mid = (left + right) / 2;
+  int mid = (left + right) / 2;
 
   MergeSortKaiImpl(a, assist, left, mid);
   MergeSortKaiImpl(a, assist, mid + 1, right);
@@ -363,6 +359,28 @@ void MergeSortKai(int a[], const int size) {
 	int* assist= (int *)malloc(size * sizeof(int));
 
   MergeSortKaiImpl(a, assist, 0, size - 1);
+
+	free(assist);
+}
+
+void _merge_sort_kai(int a[], int b[], const int left, const int right) {
+	int middle;
+
+	if (left >= right)
+		return;
+
+	middle = (left + right) / 2;
+
+	_merge_sort_kai(a, b, left, middle);
+	_merge_sort_kai(a, b, middle + 1, right);
+
+	MergeKai(a, b, left, middle, right);
+}
+
+void merge_sort_kai(int a[], const int size) {
+	int* assist= (int *)malloc(size * sizeof(int));
+
+  _merge_sort_kai(a, assist, 0, size - 1);
 
 	free(assist);
 }

@@ -50,6 +50,6 @@ add_library(mtree STATIC mtree.cc mtree.h)
 add_library(random_shuffle STATIC random_shuffle.cc)
 target_link_libraries(random_shuffle rand)
 
-add_library(sort STATIC sort.cc sort.h)
+add_library(sort STATIC sort.cc sort.h merge_sort_o1_space.cc merge_sort_o1_space.h)
 
 add_library(tree_traversal STATIC tree_traversal.cc tree_traversal.h tree.h)

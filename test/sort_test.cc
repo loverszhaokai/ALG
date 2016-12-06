@@ -15,8 +15,6 @@
 
 // Refer: http://bbs.byr.cn/#!article/ACM_ICPC/87550?p=1
 
-#include "sort.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,6 +27,8 @@
 #include <sstream>
 #include <string>
 
+#include "src/sort.h"
+#include "src/merge_sort_o1_space.h"
 #include "test.h"
 #include "time_util.h"
 
@@ -228,15 +228,16 @@ int main()
 	TimeUtil tu;
 
 	const struct ArrSize arr_sizes [] = {
-		{ 1000000, 20 },         // 1   million  * 20           = 20  million
+//		{ 1000000, 20 },         // 1   million  * 20           = 20  million
 
 // Why comment the following test vectors ?
 // Because they are slow, if you want test the sort algorithms, you
 // can uncomment the follwing test vectors
 
-		{ 10000000, 20 },        // 10  million  * 20           = 200 million
+//		{ 10000000, 20 },        // 10  million  * 20           = 200 million
 
-		{ 100000, 200 },         // 100 thousand * 200          = 20  million
+//		{ 100000, 200 },         // 100 thousand * 200          = 20  million
+//		{ 10000, 2000 },        // 100 thousand * 2000         = 200 million
 		{ 100000, 2000 },        // 100 thousand * 2000         = 200 million
 	};
 
@@ -249,8 +250,10 @@ int main()
 //    { "quick_sort_iteratively2", quick_sort_iteratively2 },
 		{ "merge_sort_iteratively", merge_sort_iteratively },
 		{ "merge_sort", merge_sort },
+		{ "merge_sort_kai", merge_sort_kai },
 		{ "MergeSortIterativelyKai", MergeSortIterativelyKai },
 		{ "MergeSortKai", MergeSortKai },
+		{ "MergeSortO1Space", MergeSortO1Space },
 //    { "bubble_sort", bubble_sort },
 	};
 

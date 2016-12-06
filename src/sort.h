@@ -37,6 +37,8 @@ void merge_sort_iteratively(int a[], const int size);
 
 void merge_sort(int a[], const int size);
 
+void merge_sort_kai(int a[], const int size);
+
 void MergeSortIterativelyKai(int a[], const int size);
 
 void MergeSortKai(int a[], const int size);
